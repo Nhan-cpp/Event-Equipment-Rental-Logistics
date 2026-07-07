@@ -5,7 +5,16 @@ class EquipmentServices():
     __repositories = None
     def __init__(self):
         self.__repositories = EquipmentRepositories()
+
+    def loadEquipments(self):
+        equipmentList = self.__repositories.loadEquipments()
+        if not equipmentList:
+            pass
+        return equipmentList
     
+    def saveEquipments(self):
+        return self.__repository.saveEquipments()
+
     def searchById(self,equipmentID):
         return self.__repositories.searchById(equipmentID)
     

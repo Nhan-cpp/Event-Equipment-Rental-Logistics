@@ -1,4 +1,5 @@
 from models.Equipment import Equipment
+import os
 
 class EquipmentRepositories():
     FILE_PATH = 'data/equipmentData.txt'
@@ -7,12 +8,44 @@ class EquipmentRepositories():
         self.__equipmentList = self.loadEquipments()
     
     def loadEquipments(self):
-        pass
+        equipmentList = []
+
+        if not os.path.exists(self.FILE_PATH):
+            os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
+
+            with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
+                pass
+            return equipmentList
+
+        try:
+            with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
+                for line in file:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    parts = line.split(',')
+                    
+                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),(parts[3] == 'True'))
+                    equipmentList.append(equipment)
+        except FileNotFoundError:
+            raise ValueError("Equipment file not found. Start with empty list.")
+        return equipmentList
+    
     def saveEquipments(self):
-        pass
+        os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
+        try:
+            with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
+                for equipment in self.__equipmentList:
+                    line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus}\n"
+                    file.write(line)
+            return True
+            
+        except Exception:
+            return False
+
     def searchById(self, equipmentID):
         for index in range(len(self.__equipmentList)):
-            if self.__equipmentList[index].ID == equipmentID:
+            if self.__equipmentList[index].Id == equipmentID:
                 return index
         return -1
     def searchByStatus(self):
