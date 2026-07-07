@@ -31,9 +31,9 @@ class RentalRepositories():
                         )
                         rentalList.append(rentalRecord)
         except FileNotFoundError:
-            print("Rental data file not found")
+            raise ValueError("Rental data file not found")
         except ValueError:
-            print("Invalid rental data format")
+            raise ValueError("Invalid rental data format")
 
         return rentalList
     def saveRentals(self):
@@ -45,11 +45,9 @@ class RentalRepositories():
                     return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M") if rental.expectedReturnTime else ""
                     line = f"{rental.Id},{rental.clientName},{start_str},{return_str}\n"
                     file.write(line)
-            print("Rental data saved successfully")
             return True
         except Exception:
-            print("Error while saving rental data")
-            return False
+            raise ValueError("Error while saving rental data")
 
     def searchById(self):
         pass
