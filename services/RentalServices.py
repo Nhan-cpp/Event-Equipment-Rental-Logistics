@@ -7,6 +7,13 @@ class RentalServices():
     def __init__(self):
         self.__repositories = RentalRepositories()
 
+    def loadRentals(self):
+        rentalList = self.__repositories.loadRentals()
+        return rentalList
+
+    def saveRentals(self):
+        return self.__repositories.saveRentals()
+
     def searchById(self):
         pass
     def append(self):
