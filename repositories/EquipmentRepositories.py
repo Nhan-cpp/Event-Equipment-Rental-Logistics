@@ -20,8 +20,24 @@ class EquipmentRepositories():
     def append(self, new_equipment):
         self.__equipmentList.append(new_equipment)
         return True
-    def update(self):
-        pass
+    
+    def update(self, equipmentID, selectedField, newValue):
+
+        index = self.searchById(equipmentID)
+        if index == -1:
+            return False
+        equipment = self.__equipmentList[index]
+
+        if selectedField == "powerRating":
+            equipment.powerRating = newValue
+        elif selectedField == "hourlyRentalRate":
+            equipment.hourlyRentalRate = newValue
+        elif selectedField == "currentStatus":
+            equipment.currentStatus = newValue
+        
+        self.__equipmentList[index] = equipment
+        return True
+    
     def sort(self, sortType, isReverse):
         criteria = {
             "hourlyRentalRate": lambda x: x.hourlyRentalRate,
@@ -29,4 +45,12 @@ class EquipmentRepositories():
         }
         return sorted(self.__equipmentList, key=criteria[sortType], reverse=isReverse)
     def groupByStatus(self):
-        pass
+        availableList = []
+        rentedList = []
+
+        for equipment in self.__equipmentList:
+            if equipment.currentStatus:
+                availableList.append(equipment)
+            else:
+                rentedList.append(equipment)
+        return availableList, rentedList

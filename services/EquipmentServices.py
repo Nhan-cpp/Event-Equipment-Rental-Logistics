@@ -19,8 +19,25 @@ class EquipmentServices():
 
         return self.__repositories.append(new_equipment)
 
-    def update(self):
-        pass
+    def update(self, equipmentID, selectedField, newValue):
+        """
+        Kiểm tra:
+        1. Equipment có tồn tại không.
+        2. Field hợp lệ không.
+        3. Giá trị nhập hợp lệ không.
+        """
+
+        if self.__repositories.searchById(equipmentID) == -1:
+            return False
+
+        validFields = ["powerRating","hourlyRentalRate","currentStatus"]
+        if selectedField not in validFields:
+            return False
+        if selectedField != "currentStatus":
+            if newValue <= 0:
+                return False
+        return self.__repositories.update(equipmentID,selectedField,newValue)
+    
     def sort(self, sortType, isReverse):
         if sortType != "hourlyRentalRate" and sortType != "powerRating":
             return []  # Trả về danh sách rỗng nếu kiểu sort không hợp lệ
@@ -28,4 +45,4 @@ class EquipmentServices():
         return self.__repositories.sort(sortType, isReverse)
     
     def groupByStatus(self):
-        pass
+        return self.__repositories.groupByStatus()
