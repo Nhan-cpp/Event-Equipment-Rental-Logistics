@@ -3,6 +3,7 @@ import os
 
 class EquipmentRepositories():
     FILE_PATH = 'data/equipmentData.txt'
+    MAINTENANCE_FILE_PATH = 'data/equipmentMaintenanceLog.txt'
     __equipmentList = []
     def __init__(self):
         self.__equipmentList = self.loadEquipments()
@@ -43,13 +44,31 @@ class EquipmentRepositories():
         except Exception:
             return False
 
+    def writeEquipmentMaintenanceLog(self, equipment, action):
+        os.makedirs(os.path.dirname(self.MAINTENANCE_FILE_PATH), exist_ok=True)
+        try:
+            from datetime import datetime
+            with open(self.MAINTENANCE_FILE_PATH, 'a', encoding='utf-8') as file:
+                current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus},{action},{current_time}\n"
+                file.write(line)
+            return True
+        except Exception:
+            raise ValueError("Error while writing equipment maintenance log")
+
     def searchById(self, equipmentID):
         for index in range(len(self.__equipmentList)):
             if self.__equipmentList[index].Id == equipmentID:
                 return index
         return -1
-    def searchByStatus(self):
-        pass
+    def searchByStatus(self, status):
+        resultList = []
+        for equipment in self.__equipmentList:
+            if equipment.currentStatus == status:
+                resultList.append(equipment)
+                    
+        return resultList
+    
     def append(self, new_equipment):
         self.__equipmentList.append(new_equipment)
         return True

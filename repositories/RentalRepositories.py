@@ -4,6 +4,7 @@ import os
 
 class RentalRepositories():
     FILE_PATH = 'data/rentalData.txt'
+    HISTORY_FILE_PATH = 'data/rentalHistoryLog.txt'
     __rentalList = []
 
     def __init__(self):
@@ -49,8 +50,25 @@ class RentalRepositories():
         except Exception:
             raise ValueError("Error while saving rental data")
 
-    def searchById(self):
-        pass
+    def writeRentalHistoryLog(self, rental):
+        os.makedirs(os.path.dirname(self.HISTORY_FILE_PATH), exist_ok=True)
+        try:
+            with open(self.HISTORY_FILE_PATH, 'a', encoding='utf-8') as file:
+                start_str = rental.startTime.strftime("%d/%m/%Y %H:%M") if rental.startTime else ""
+                return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M") if rental.expectedReturnTime else ""
+                current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                line = f"{rental.Id},{rental.clientName},{start_str},{return_str},{current_time}\n"
+                file.write(line)
+            return True
+        except Exception:
+            raise ValueError("Error while writing rental history log")
+
+    def searchById(self, rental_id):
+        for index in range(len(self.__rental_list)):
+            if self.__rental_list[index].ID == rental_id:
+                return index
+        return -1
+    
     def append(self):
         pass
     def calculateFeesAndLatePenalties(self):

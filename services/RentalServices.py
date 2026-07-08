@@ -14,8 +14,12 @@ class RentalServices():
     def saveRentals(self):
         return self.__repositories.saveRentals()
 
-    def searchById(self):
-        pass
+    def writeRentalHistoryLog(self, rental):
+        return self.__repositories.writeRentalHistoryLog(rental)
+
+    def searchById(self, rentalID):
+        return self.__repositories.searchById(rentalID)
+    
     def append(self):
         pass
     def calculateFeesAndLatePenalties(self):

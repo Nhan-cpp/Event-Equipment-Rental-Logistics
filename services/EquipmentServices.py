@@ -15,11 +15,15 @@ class EquipmentServices():
     def saveEquipments(self):
         return self.__repository.saveEquipments()
 
+    def writeEquipmentMaintenanceLog(self, equipment, action):
+        return self.__repositories.writeEquipmentMaintenanceLog(equipment, action)
+
     def searchById(self,equipmentID):
         return self.__repositories.searchById(equipmentID)
     
-    def searchByStatus(self):
-        pass
+    def searchByStatus(self, status):
+        return self.__repositories.searchByStatus(status)
+    
     def append(self, new_equipment : Equipment):
         if self.__repositories.searchById(new_equipment.Id) != -1:
             return False
