@@ -19,7 +19,7 @@ class RentalRepositories():
             os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 pass
-            return rentalList
+            self.__rentalList = rentalList
 
         try:
             with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
@@ -39,7 +39,8 @@ class RentalRepositories():
         except ValueError:
             raise ValueError("Invalid rental data format")
 
-        return rentalList
+        self.__rentalList = rentalList
+    
     def saveRentals(self):
         os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
         try:
@@ -49,7 +50,6 @@ class RentalRepositories():
                     return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M") if rental.expectedReturnTime else ""
                     line = f"{rental.Id},{rental.clientName},{start_str},{return_str}\n"
                     file.write(line)
-            return True
         except Exception:
             raise ValueError("Error while saving rental data")
 
@@ -62,13 +62,12 @@ class RentalRepositories():
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 line = f"{rental.Id},{rental.clientName},{start_str},{return_str},{current_time}\n"
                 file.write(line)
-            return True
         except Exception:
             raise ValueError("Error while writing rental history log")
 
-    def searchById(self, rental_id):
+    def searchById(self, rentalId):
         for index in range(len(self.__rental_list)):
-            if self.__rental_list[index].ID == rental_id:
+            if self.__rental_list[index].ID == rentalId:
                 return index
         return -1
     

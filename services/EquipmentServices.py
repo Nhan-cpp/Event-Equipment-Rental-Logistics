@@ -8,20 +8,26 @@ class EquipmentServices():
 
     def loadEquipments(self):
         equipmentList = self.__repositories.loadEquipments()
-        if not equipmentList:
-            pass
-        return equipmentList
+        return True
     
     def saveEquipments(self):
-        return self.__repository.saveEquipments()
-
+        try:
+            self.__repository.saveEquipments()
+            return True
+        except:
+            return False
+        
     def writeEquipmentMaintenanceLog(self, equipment, action):
-        return self.__repositories.writeEquipmentMaintenanceLog(equipment, action)
-
+        try:
+            self.__repositories.writeEquipmentMaintenanceLog(equipment, action)
+            return True
+        except:
+            return False
+        
     def searchById(self,equipmentID):
         return self.__repositories.searchById(equipmentID)
     
-    def searchByStatus(self, status):
+    def searchByStatus(self, status : bool):
         return self.__repositories.searchByStatus(status)
     
     def append(self, new_equipment : Equipment):
@@ -30,7 +36,8 @@ class EquipmentServices():
         if new_equipment.powerRating <= 0 or new_equipment.hourlyRentalRate <= 0:
             return False 
 
-        return self.__repositories.append(new_equipment)
+        self.__repositories.append(new_equipment)
+        return True
 
     def update(self, equipmentID, selectedField, newValue):
         """
@@ -49,7 +56,8 @@ class EquipmentServices():
         if selectedField != "currentStatus":
             if newValue <= 0:
                 return False
-        return self.__repositories.update(equipmentID,selectedField,newValue)
+        self.__repositories.update(equipmentID,selectedField,newValue)
+        return True
     
     def sort(self, sortType, isReverse):
         if sortType != "hourlyRentalRate" and sortType != "powerRating":

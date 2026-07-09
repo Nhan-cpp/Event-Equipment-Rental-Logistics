@@ -9,18 +9,33 @@ class RentalServices():
         self.__repositories = RentalRepositories()
 
     def loadRentals(self):
-        rentalList = self.__repositories.loadRentals()
-        return rentalList
+        try:
+            self.__repositories.loadRentals()
+            return True
+        except:
+            return False
 
     def saveRentals(self):
-        return self.__repositories.saveRentals()
+        try:
+            self.__repositories.saveRentals()
+            return True
+        except:
+            return False
 
     def writeRentalHistoryLog(self, rental):
-        return self.__repositories.writeRentalHistoryLog(rental)
+        try:
+            self.__repositories.writeRentalHistoryLog(rental)
+            return True
+        except:
+            return False
 
     def searchById(self, rentalID):
-        return self.__repositories.searchById(rentalID)
-    
+        try:
+            rentalID = str(rentalID)
+            return self.__repositories.searchById(rentalID)
+        except:
+            raise ValueError("rental Id need be a string.")
+        
     def append(self,new_rental : Rental):
         if(self.__repositories.searchById(new_rental.Id) != -1):
             return False

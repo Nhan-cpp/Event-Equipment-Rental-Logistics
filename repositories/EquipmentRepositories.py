@@ -16,7 +16,7 @@ class EquipmentRepositories():
 
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 pass
-            return equipmentList
+            self.__equipmentList = equipment
 
         try:
             with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
@@ -30,7 +30,7 @@ class EquipmentRepositories():
                     equipmentList.append(equipment)
         except FileNotFoundError:
             raise ValueError("Equipment file not found. Start with empty list.")
-        return equipmentList
+        self.__equipmentList = equipmentList
     
     def saveEquipments(self):
         os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
@@ -39,10 +39,9 @@ class EquipmentRepositories():
                 for equipment in self.__equipmentList:
                     line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus}\n"
                     file.write(line)
-            return True
             
         except Exception:
-            return False
+            raise ValueError
 
     def writeEquipmentMaintenanceLog(self, equipment, action):
         os.makedirs(os.path.dirname(self.MAINTENANCE_FILE_PATH), exist_ok=True)
@@ -61,6 +60,7 @@ class EquipmentRepositories():
             if self.__equipmentList[index].Id == equipmentID:
                 return index
         return -1
+    
     def searchByStatus(self, status):
         resultList = []
         for equipment in self.__equipmentList:
@@ -69,15 +69,10 @@ class EquipmentRepositories():
                     
         return resultList
     
-    def append(self, new_equipment):
+    def append(self, new_equipment : Equipment):
         self.__equipmentList.append(new_equipment)
-        return True
     
-    def update(self, equipmentID, selectedField, newValue):
-
-        index = self.searchById(equipmentID)
-        if index == -1:
-            return False
+    def update(self, index : int, selectedField : str, newValue):
         equipment = self.__equipmentList[index]
 
         if selectedField == "powerRating":
@@ -88,7 +83,6 @@ class EquipmentRepositories():
             equipment.currentStatus = newValue
         
         self.__equipmentList[index] = equipment
-        return True
     
     def sort(self, sortType, isReverse):
         criteria = {
@@ -96,6 +90,7 @@ class EquipmentRepositories():
             "powerRating": lambda x: x.powerRating
         }
         return sorted(self.__equipmentList, key=criteria[sortType], reverse=isReverse)
+    
     def groupByStatus(self):
         availableList = []
         rentedList = []
