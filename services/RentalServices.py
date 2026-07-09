@@ -1,4 +1,5 @@
 from repositories.RentalRepositories import RentalRepositories
+from models.Rental import Rental
 
 class RentalServices():
 
@@ -20,9 +21,16 @@ class RentalServices():
     def searchById(self, rentalID):
         return self.__repositories.searchById(rentalID)
     
-    def append(self):
-        pass
-    def calculateFeesAndLatePenalties(self):
-        pass
-    def sort(self):
-        pass
+    def append(self,new_rental : Rental):
+        if(self.__repositories.searchById(new_rental.Id) != -1):
+            return False
+        if(new_rental.startTime > new_rental.expectedReturnTime):
+            return False
+        
+        self.__repositories.append(new_rental)
+        return True
+        
+    def calculateFeesAndLatePenalties(self,rentalId):
+        return self.__repositories.calculateFeesAndLatePenalties(rentalId)
+    def sort(self, sort_type,is_reverse=False):
+        return self.__repositories.sort(sort_type,is_reverse)

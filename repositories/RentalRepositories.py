@@ -5,10 +5,13 @@ import os
 class RentalRepositories():
     FILE_PATH = 'data/rentalData.txt'
     HISTORY_FILE_PATH = 'data/rentalHistoryLog.txt'
+    HOURLY_RENTAL_RATE = 0.2
+    LATE_PENTALTY_RATE = 0.1
     __rentalList = []
 
     def __init__(self):
         self.__rentalList = self.loadRentals()
+        
     def loadRentals(self):
         rentalList = []
         
@@ -69,9 +72,45 @@ class RentalRepositories():
                 return index
         return -1
     
-    def append(self):
-        pass
-    def calculateFeesAndLatePenalties(self):
-        pass
-    def sort(self):
-        pass
+    def append(self, rental):
+        self.__rentalList.append(rental)
+
+    def calculateFeesAndLatePenalties(self, rentalId):
+        index = self.searchById(rentalId)
+        if(index == -1):
+            raise ValueError('Rental Id not found.')
+        rental = self.__rentalList[index]
+        current_time = datetime.now()
+
+        rental_duration = rental.expectedReturnTime - rental.startTime
+        rental_duration_hours = rental_duration.total_seconds() / 3600
+        base_fee = rental_duration_hours * self.HOURLY_RENTAL_RATE
+
+        if current_time > rental.expectedReturnTime:
+            late_duration = current_time - rental.expectedReturnTime
+            late_duration_hours = late_duration.total_seconds() / 3600
+            late_penalty = late_duration_hours * self.LATE_PENTALTY_RATE
+        else:
+            late_penalty = 0
+
+        total_fee = base_fee + late_penalty
+        return total_fee
+    
+    def sort(self, sort_type, is_reverse=False):
+        
+        if sort_type == "duration":
+            sorted_list = sorted(
+                self.__rentalList, 
+                key=lambda rental: rental.expectedReturnTime - rental.startTime,
+                reverse=is_reverse
+            )
+        elif sort_type == "clientName":
+            sorted_list = sorted(
+                self.__rentalList, 
+                key=lambda rental: rental.clientName,
+                reverse=is_reverse
+            )
+        else:
+            return None
+            
+        return sorted_list
