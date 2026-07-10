@@ -5,7 +5,9 @@ class Equipment():
     _powerRating = None
     _hourlyRentalRate = None
     _currentStatus = None
-    
+    MIN_ID_LEN = 8
+    MAX_ID_LEN = 20
+
     def __init__(self,Id,powerRating,hourlyRentalRate,currentStatus):
         self._Id = Id
         self._powerRating = powerRating
@@ -16,9 +18,13 @@ class Equipment():
     def Id(self):
         return self._Id
     @Id.setter
-    def Id(self,new_value):
-        if(validate_ID(new_value) == True):
-            self._Id = new_value
+    def Id(self,new_value : str):
+        if(len(new_value) < self.MIN_ID_LEN and self.MAX_ID_LEN < len(new_value)):
+            raise ValueError(f"Equipment id need length from {self.MIN_ID_LEN} to {self.MAX_ID_LEN}")
+        for character in new_value:
+            if not character.isalnum():
+                raise ValueError("Equipment Id only contain character or digit.")
+        self._Id = new_value
     @property
     def powerRating(self):
         return self._powerRating
@@ -26,11 +32,13 @@ class Equipment():
     def powerRating(self,new_value):
         try:
             new_value = float(new_value)
-            if(new_value < 0.0):
-                return
-            self._powerRating = new_value
-        except:
-            raise ValueError("Need be a number and greater than 0")
+        except ValueError:
+            raise ValueError("Equipment power rating must be a number.")
+        
+        if new_value <= 0.0:
+            raise ValueError("Equipment power rating must be greater than 0.")
+            
+        self._powerRating = new_value
     @property
     def hourlyRentalRate(self):
         return self._hourlyRentalRate
@@ -38,11 +46,13 @@ class Equipment():
     def hourlyRentalRate(self,new_value):
         try:
             new_value = float(new_value)
-            if(new_value < 0.0):
-                return
-            self._hourlyRentalRate = new_value
-        except:
-            raise ValueError("Need be a number and greater than 0")
+        except ValueError:
+            raise ValueError("Equipment hourly rental rate must be a number.")
+            
+        if new_value <= 0.0:
+            raise ValueError("Equipment hourly rental rate must be greater than 0.")
+            
+        self._hourlyRentalRate = new_value
     @property
     def currentStatus(self):
         return self._currentStatus
@@ -51,5 +61,5 @@ class Equipment():
         try:
             self._currentStatus = bool(new_value)
         except:
-            raise ValueError("Need be a boolean.")
+            raise ValueError("Equipment current status need be a boolean.")
     
