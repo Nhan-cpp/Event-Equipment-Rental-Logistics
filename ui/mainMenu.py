@@ -4,9 +4,10 @@ import sys
 import time
 import os
 
-class mainMenu(equipmentMenu, rentalMenu):
+class mainMenu():
     def __init__(self):
-        super().__init__()
+        self.eqMenu = equipmentMenu()
+        self.rtMenu = rentalMenu()
 
     def __printMenu(self):
         print("\n" + "="*60)
@@ -15,14 +16,14 @@ class mainMenu(equipmentMenu, rentalMenu):
         print(" --- EQUIPMENT OPTIONS ---")
         print("  [1] Add New Equipment")
         print("  [2] Update Equipment Information")
-        print("  [3] Search Equipment (By ID or Status)")
-        print("  [4] View & Sort Equipment List")
+        print("  [3] Search Equipment By ID")
+        print("  [4] Search Equipment By Status")
+        print("  [5] View & Group equipment by rental status")
+        print("  [6] View & Sort Equipment List")
         print(" --- RENTAL OPTIONS ---")
-        print("  [5] Create New Rental Record")
-        print("  [6] Calculate Rental Fees & Penalties")
-        print("  [7] View & Sort Rental List")
-        print(" --- SYSTEM OPTIONS ---")
-        print("  [8] Save All Data & Logs")
+        print("  [7] Add New Rental Record")
+        print("  [8] Calculate Rental Fees & Penalties")
+        print("  [9] View & Sort Rental List")
         print("  [0] Exit")
         print("-" * 60)
 
@@ -30,22 +31,26 @@ class mainMenu(equipmentMenu, rentalMenu):
         while True:
             self.__printMenu()
             
-            choice = input("👉 Please select an option (0-8): ").strip()
-            
+            choice = input("👉 Your choice: ").strip()
+
             if choice == '1':
-                print("\n[To do: Call self.add_equipment_ui()]")
+                self.eqMenu.append()
             elif choice == '2':
-                print("\n[To do: Call self.update_equipment_ui()]")
+                self.eqMenu.update()
             elif choice == '3':
-                print("\n[To do: Call self.search_equipment_ui()]")
+                self.eqMenu.searchById()
             elif choice == '4':
-                print("\n[To do: Call self.view_equipment_ui()]")
+                self.eqMenu.searchByStatus()
             elif choice == '5':
-                print("\n[To do: Call self.add_rental_ui()]")
+                self.eqMenu.groupByStatus()
             elif choice == '6':
-                print("\n[To do: Call self.calculate_fees_ui()]")
+                self.eqMenu.sort()
             elif choice == '7':
-                print("\n[To do: Call self.view_rental_ui()]")
+                self.rtMenu.append()
+            elif choice == '8':
+                self.rtMenu.calculateFeesAndLatePenalties()
+            elif choice == '9':
+                self.rtMenu.sort()
             elif choice == '0':
                 print("\n👋 Thank you for using the system. Goodbye!\n")
                 sys.exit(0)
@@ -53,6 +58,6 @@ class mainMenu(equipmentMenu, rentalMenu):
                 print("\n❌ Invalid choice. Please try again.")
                 time.sleep(1.5)
 
-            os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls')
 
     
