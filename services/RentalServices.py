@@ -38,6 +38,12 @@ class RentalServices():
         except Exception as e:
             raise ValueError(f"Failed to write rental history log: {e}")
 
+    def getRentalByIndex(self, RentalID : str) -> Rental:
+        index = self.searchById(RentalID)
+        if index == -1:
+            raise ValueError(f"Rental ID not found: {RentalID}")
+        return self.__repositories.getRentalByIndex(index)
+    
     def searchById(self, rentalID):
         try:
             rentalID = str(rentalID)
