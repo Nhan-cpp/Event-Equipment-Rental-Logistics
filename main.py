@@ -1,7 +1,6 @@
-from models.Equipment import equipment
+from ui.mainMenu import mainMenu
 def main():
-    test = equipment("12124124",0.2,-1,True)
-    test.ID = "1_"
-    print(test.ID)
+    test = mainMenu()
+    test.display()
 if __name__ == "__main__":
     main()

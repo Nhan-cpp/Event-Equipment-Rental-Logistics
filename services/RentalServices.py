@@ -47,5 +47,6 @@ class RentalServices():
         
     def calculateFeesAndLatePenalties(self,rentalId):
         return self.__repositories.calculateFeesAndLatePenalties(rentalId)
+    
     def sort(self, sort_type,is_reverse=False):
         return self.__repositories.sort(sort_type,is_reverse)
