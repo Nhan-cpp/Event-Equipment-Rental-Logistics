@@ -6,12 +6,16 @@ class rentalMenu():
     def __init__(self):
         super().__init__()
         self.__services = RentalServices()
-        if(self.__services.loadRentals() == False):
-            raise ValueError("Load Rental Data Failed.")
+        try:
+            self.__services.loadRentals()
+        except ValueError as e:
+            print(f"Warning: {e}")
         
     def saveRentals(self):
-        if(self.__services.saveRentals() == False):
-            raise ValueError("Save Rental Data Failed.")
+        try:
+            self.__services.saveRentals()
+        except ValueError as e:
+            print(f"Error saving: {e}")
 
     def writeRentalHistoryLog(self):
         pass
