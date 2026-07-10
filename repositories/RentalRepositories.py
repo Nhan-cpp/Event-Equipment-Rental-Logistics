@@ -7,19 +7,12 @@ class RentalRepositories():
     HISTORY_FILE_PATH = 'data/rentalHistoryLog.txt'
     HOURLY_RENTAL_RATE = 0.2
     LATE_PENTALTY_RATE = 0.1
-    __rentalList = []
 
     def __init__(self):
-        self.__rentalList = self.loadRentals()
+        self.__rentalList = []
         
     def loadRentals(self):
         rentalList = []
-        
-        if not os.path.exists(self.FILE_PATH):
-            os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
-            with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
-                pass
-            self.__rentalList = rentalList
 
         try:
             with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
@@ -42,7 +35,6 @@ class RentalRepositories():
         self.__rentalList = rentalList
     
     def saveRentals(self):
-        os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for rental in self.__rentalList:
@@ -54,7 +46,6 @@ class RentalRepositories():
             raise ValueError("Error while saving rental data")
 
     def writeRentalHistoryLog(self, rental):
-        os.makedirs(os.path.dirname(self.HISTORY_FILE_PATH), exist_ok=True)
         try:
             with open(self.HISTORY_FILE_PATH, 'a', encoding='utf-8') as file:
                 start_str = rental.startTime.strftime("%d/%m/%Y %H:%M") if rental.startTime else ""

@@ -1,22 +1,16 @@
 from models.Equipment import Equipment
+from datetime import datetime
 import os
 
 class EquipmentRepositories():
     FILE_PATH = 'data/equipmentData.txt'
     MAINTENANCE_FILE_PATH = 'data/equipmentMaintenanceLog.txt'
-    __equipmentList = []
+    
     def __init__(self):
-        self.__equipmentList = self.loadEquipments()
+        self.__equipmentList = []
     
     def loadEquipments(self):
         equipmentList = []
-
-        if not os.path.exists(self.FILE_PATH):
-            os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
-
-            with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
-                pass
-            self.__equipmentList = equipmentList
 
         try:
             with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
@@ -33,7 +27,6 @@ class EquipmentRepositories():
         self.__equipmentList = equipmentList
     
     def saveEquipments(self):
-        os.makedirs(os.path.dirname(self.FILE_PATH), exist_ok=True)
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for equipment in self.__equipmentList:
@@ -44,9 +37,7 @@ class EquipmentRepositories():
             raise ValueError
 
     def writeEquipmentMaintenanceLog(self, equipment, action):
-        os.makedirs(os.path.dirname(self.MAINTENANCE_FILE_PATH), exist_ok=True)
         try:
-            from datetime import datetime
             with open(self.MAINTENANCE_FILE_PATH, 'a', encoding='utf-8') as file:
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus},{action},{current_time}\n"
