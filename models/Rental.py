@@ -1,4 +1,5 @@
 from utils.utils import validate_ID
+from datetime import datetime
 
 class Rental():
     _Id = None
@@ -7,11 +8,11 @@ class Rental():
     _expectedReturnTime = None
     MIN_ID_LEN = 8
     MAX_ID_LEN = 20
-    def __init__(self,Id,clientName,startTime,expectedReturnTime):
+    def __init__(self, Id="", clientName="", startTime=None, expectedReturnTime=None):
         self._Id = Id
         self._clientName = clientName
-        self._startTime = startTime
-        self._expectedReturnTime = expectedReturnTime
+        self._startTime = startTime if startTime is not None else datetime.now()
+        self._expectedReturnTime = expectedReturnTime if expectedReturnTime is not None else datetime.now()
     
     @property
     def Id(self):
@@ -39,15 +40,18 @@ class Rental():
         try:
             self._startTime = new_value
         except:
-            raise ValueError("Need be a time format.")
+            raise ValueError("Invalid return time format.")
     @property
     def expectedReturnTime(self):
         return self._expectedReturnTime
     @expectedReturnTime.setter
     def expectedReturnTime(self,new_value):
         try:
-            if(self._startTime < new_value):
-                raise ValueError("Rental expected return time must early than start time")
+            if self._startTime and new_value:
+                if self._startTime > new_value:
+                    raise ValueError("Expected return time must be later than start time.")
             self._expectedReturnTime = new_value
+        except ValueError as e:
+            raise e
         except:
-            raise ValueError("Rental expected return time have some error.")        
+            raise ValueError("Invalid return time format.")        

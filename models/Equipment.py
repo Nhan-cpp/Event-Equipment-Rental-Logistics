@@ -8,7 +8,7 @@ class Equipment():
     MIN_ID_LEN = 8
     MAX_ID_LEN = 20
 
-    def __init__(self,Id,powerRating,hourlyRentalRate,currentStatus):
+    def __init__(self,Id = "",powerRating = 0.0,hourlyRentalRate = 0.0,currentStatus = True):
         self._Id = Id
         self._powerRating = powerRating
         self._hourlyRentalRate = hourlyRentalRate
