@@ -22,12 +22,7 @@ class equipmentMenu():
         pass
 
     def searchById(self):
-        id = input('Enter Equipment ID: ')
-        try:
-            record = self.__services.record(id)
-            print(f"Found: {record.Id}, Power: {record.powerRating}")
-        except Exception as e:
-            print(f"Error : {e}")
+        pass
                         
     def searchByStatus(self):
         pass
