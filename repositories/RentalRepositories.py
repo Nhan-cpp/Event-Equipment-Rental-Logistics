@@ -56,6 +56,9 @@ class RentalRepositories():
         except Exception:
             raise ValueError("Error while writing rental history log")
 
+    def getRentalByIndex(self, index: int):
+        return self.__rentalList[index]
+
     def searchById(self, rentalId):
         for index in range(len(self.__rental_list)):
             if self.__rental_list[index].ID == rentalId:

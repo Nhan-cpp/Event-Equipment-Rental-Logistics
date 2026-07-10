@@ -46,6 +46,9 @@ class EquipmentRepositories():
         except Exception:
             raise ValueError("Error while writing equipment maintenance log")
 
+    def getEquipmentByIndex(self, index: int):
+        return self.__equipmentList[index]
+
     def searchById(self, equipmentID):
         for index in range(len(self.__equipmentList)):
             if self.__equipmentList[index].Id == equipmentID:
@@ -59,9 +62,6 @@ class EquipmentRepositories():
                 resultList.append(equipment)
                     
         return resultList
-    
-    def getEquipmentByIndex(self, index: int):
-        return self.__equipmentList[index]
         
     def append(self, new_equipment : Equipment):
         self.__equipmentList.append(new_equipment)
