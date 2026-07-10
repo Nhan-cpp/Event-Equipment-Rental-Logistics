@@ -8,42 +8,53 @@ class RentalServices():
     def __init__(self):
         self.__repositories = RentalRepositories()
 
+    def __ensure_file_exists(self, file_path):
+        import os
+        dir_path = os.path.dirname(file_path)
+        if dir_path and not os.path.exists(dir_path):
+            os.makedirs(dir_path, exist_ok=True)
+        if not os.path.exists(file_path):
+            with open(file_path, 'w', encoding='utf-8') as file:
+                pass
+
     def loadRentals(self):
+        self.__ensure_file_exists(RentalRepositories.FILE_PATH)
         try:
             self.__repositories.loadRentals()
-            return True
-        except:
-            return False
+        except Exception as e:
+            raise ValueError(f"Failed to load rental records: {e}")
 
     def saveRentals(self):
+        self.__ensure_file_exists(RentalRepositories.FILE_PATH)
         try:
             self.__repositories.saveRentals()
-            return True
-        except:
-            return False
+        except Exception as e:
+            raise ValueError(f"Failed to save rental records: {e}")
 
     def writeRentalHistoryLog(self, rental):
+        self.__ensure_file_exists(RentalRepositories.HISTORY_FILE_PATH)
         try:
             self.__repositories.writeRentalHistoryLog(rental)
-            return True
-        except:
-            return False
+        except Exception as e:
+            raise ValueError(f"Failed to write rental history log: {e}")
 
     def searchById(self, rentalID):
         try:
             rentalID = str(rentalID)
             return self.__repositories.searchById(rentalID)
         except:
-            raise ValueError("rental Id need be a string.")
+            raise ValueError("Rental ID must be a string.")
         
     def append(self,new_rental : Rental):
-        if(self.__repositories.searchById(new_rental.Id) != -1):
-            return False
-        if(new_rental.startTime > new_rental.expectedReturnTime):
-            return False
+        if self.__repositories.searchById(new_rental.Id) != -1:
+            raise ValueError("Rental ID already exists.")
+        if new_rental.startTime > new_rental.expectedReturnTime:
+            raise ValueError("Start time cannot be after expected return time.")
         
-        self.__repositories.append(new_rental)
-        return True
+        try:
+            self.__repositories.append(new_rental)
+        except Exception as e:
+            raise ValueError(f"Failed to add rental record: {e}")
         
     def calculateFeesAndLatePenalties(self,rentalId):
         return self.__repositories.calculateFeesAndLatePenalties(rentalId)
