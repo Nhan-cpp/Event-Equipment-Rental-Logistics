@@ -16,7 +16,7 @@ class EquipmentRepositories():
 
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 pass
-            self.__equipmentList = equipment
+            self.__equipmentList = equipmentList
 
         try:
             with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
