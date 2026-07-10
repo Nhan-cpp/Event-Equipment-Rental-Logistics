@@ -44,6 +44,12 @@ class RentalServices():
             return self.__repositories.searchById(rentalID)
         except:
             raise ValueError("Rental ID must be a string.")
+            
+    def getRentalByIndex(self, rentalID: str) -> Rental:
+        index = self.searchById(rentalID)
+        if index == -1:
+            raise ValueError(f"Rental ID not found: {rentalID}")
+        return self.__repositories.getRentalByIndex(index)
         
     def append(self,new_rental : Rental):
         if self.__repositories.searchById(new_rental.Id) != -1:

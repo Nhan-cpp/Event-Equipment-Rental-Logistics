@@ -60,6 +60,9 @@ class EquipmentRepositories():
                     
         return resultList
     
+    def getEquipmentByIndex(self, index: int):
+        return self.__equipmentList[index]
+        
     def append(self, new_equipment : Equipment):
         self.__equipmentList.append(new_equipment)
     

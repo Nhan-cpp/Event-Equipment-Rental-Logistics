@@ -36,6 +36,12 @@ class EquipmentServices():
         except Exception as e:
             raise ValueError(f"Failed to write maintenance log: {e}")
         
+    def getEquipmentByIndex(self, equipmentID : str) -> Equipment:
+        index = self.searchById(equipmentID)
+        if index == -1:
+            raise ValueError(f"Equipment ID not found: {equipmentID}")
+        return self.__repositories.getEquipmentByIndex(index)
+    
     def searchById(self,equipmentID):
         return self.__repositories.searchById(equipmentID)
     
@@ -61,7 +67,8 @@ class EquipmentServices():
         3. Giá trị nhập hợp lệ không.
         """
 
-        if self.__repositories.searchById(equipmentID) == -1:
+        index = self.__repositories.searchById(equipmentID)
+        if index == -1:
             raise ValueError("Equipment ID not found.")
 
         validFields = ["powerRating","hourlyRentalRate","currentStatus"]
@@ -73,7 +80,7 @@ class EquipmentServices():
                 raise ValueError("Numeric values must be greater than 0.")
                 
         try:
-            self.__repositories.update(equipmentID,selectedField,newValue)
+            self.__repositories.update(index, selectedField, newValue)
         except Exception as e:
             raise ValueError(f"Failed to update equipment: {e}")
     

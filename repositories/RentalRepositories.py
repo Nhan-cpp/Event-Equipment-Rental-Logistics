@@ -62,6 +62,9 @@ class RentalRepositories():
                 return index
         return -1
     
+    def getRentalByIndex(self, index: int):
+        return self.__rentalList[index]
+        
     def append(self, rental):
         self.__rentalList.append(rental)
 
