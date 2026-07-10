@@ -32,31 +32,31 @@ class mainMenu():
             self.__printMenu()
             
             choice = input("👉 Your choice: ").strip()
-
-            if choice == '1':
-                self.eqMenu.append()
-            elif choice == '2':
-                self.eqMenu.update()
-            elif choice == '3':
-                self.eqMenu.searchById()
-            elif choice == '4':
-                self.eqMenu.searchByStatus()
-            elif choice == '5':
-                self.eqMenu.groupByStatus()
-            elif choice == '6':
-                self.eqMenu.sort()
-            elif choice == '7':
-                self.rtMenu.append()
-            elif choice == '8':
-                self.rtMenu.calculateFeesAndLatePenalties()
-            elif choice == '9':
-                self.rtMenu.sort()
-            elif choice == '0':
-                print("\n👋 Thank you for using the system. Goodbye!\n")
-                sys.exit(0)
-            else:
-                print("\n❌ Invalid choice. Please try again.")
-                time.sleep(1.5)
+            match choice:
+                case '1':
+                    self.eqMenu.append()
+                case '2':
+                    self.eqMenu.update()
+                case '3':
+                    self.eqMenu.searchById()
+                case '4':
+                    self.eqMenu.searchByStatus()
+                case '5':
+                    self.eqMenu.groupByStatus()
+                case '6':
+                    self.eqMenu.sort()
+                case '7':
+                    self.rtMenu.append()
+                case '8':
+                    self.rtMenu.calculateFeesAndLatePenalties()
+                case '9':
+                    self.rtMenu.sort()
+                case '0':
+                    print("\n👋 Thank you for using the system. Goodbye!\n")
+                    sys.exit(0)
+                case _:
+                    print("\n❌ Invalid choice. Please try again.")
+                    time.sleep(1.5)
 
             os.system('cls')
 
