@@ -60,4 +60,9 @@ class mainMenu():
 
             os.system('cls')
 
-    
+    def saveAll(self):
+        try:
+            self.eqMenu.saveEquipments()
+            self.rtMenu.saveRentals()
+        except Exception as e:
+            print(f"Error : {e}")

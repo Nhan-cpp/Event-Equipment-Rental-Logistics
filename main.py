@@ -1,6 +1,7 @@
 from ui.mainMenu import mainMenu
 def main():
-    test = mainMenu()
-    test.display()
+    Menu = mainMenu()
+    Menu.display()
+    Menu.saveAll()
 if __name__ == "__main__":
     main()
