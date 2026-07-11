@@ -59,7 +59,12 @@ class Equipment():
     @currentStatus.setter
     def currentStatus(self,new_value):
         try:
-            self._currentStatus = bool(new_value)
+            new_value = new_value.lower()
+            mapping = dict({
+                'available' : True,
+                'unavailable' : False,
+            })
+            self._currentStatus = mapping[new_value]
         except:
-            raise ValueError("Equipment current status need be a boolean.")
+            raise ValueError("Equipment current status need be Available / Unavailable.")
     
