@@ -60,13 +60,6 @@ class EquipmentServices():
             raise ValueError(f"Failed to add equipment: {e}")
 
     def update(self, equipmentID, selectedField, newValue):
-        """
-        Kiểm tra:
-        1. Equipment có tồn tại không.
-        2. Field hợp lệ không.
-        3. Giá trị nhập hợp lệ không.
-        """
-
         index = self.__repositories.searchById(equipmentID)
         if index == -1:
             raise ValueError("Equipment ID not found.")
@@ -75,9 +68,9 @@ class EquipmentServices():
         if selectedField not in validFields:
             raise ValueError("Invalid field selected for update.")
             
-        if selectedField != "currentStatus":
-            if newValue <= 0:
-                raise ValueError("Numeric values must be greater than 0.")
+        # if selectedField != "currentStatus":
+        #     if newValue <= 0:
+        #         raise ValueError("Numeric values must be greater than 0.")
                 
         try:
             self.__repositories.update(index, selectedField, newValue)

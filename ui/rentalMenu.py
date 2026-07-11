@@ -21,7 +21,31 @@ class rentalMenu():
         pass
 
     def searchById(self):
-        pass
+        newRental = Rental()
+
+        while True:
+            userInput = input("👉 Enter Rental ID (Type 'exit' to exit): ").strip()
+            if userInput.lower() == "exit":
+                return
+            
+            try:
+                newRental.Id = userInput
+                break
+            except Exception as e:
+                print(f"Error : {e}")
+
+        try:
+            foundRental = self.__services.getRentalByIndex(newRental.Id)
+
+            print("\nRental Information")
+            print("-" * 40)
+            print(foundRental)
+            print("-" * 40)
+
+        except Exception as e:
+            print(f"Error : {e}")
+
+        input("\nPress Enter to continue...")
 
     def append(self):
         pass

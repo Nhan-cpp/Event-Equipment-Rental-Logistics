@@ -59,7 +59,7 @@ class Equipment():
     @currentStatus.setter
     def currentStatus(self,new_value):
         try:
-            new_value = new_value.lower()
+            new_value = str(new_value).strip().lower()
             mapping = dict({
                 'available' : True,
                 'unavailable' : False,

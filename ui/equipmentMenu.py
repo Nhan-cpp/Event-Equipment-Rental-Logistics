@@ -88,48 +88,80 @@ class equipmentMenu():
         input("\nPress Enter to continue...")
 
     def update(self):
-        pass
+
+        newEquipment = Equipment()
+        # Nhập ID cần cập nhật
+        while True:
+
+            userInput = input(
+                "👉 Enter Equipment ID (Type 'exit' to exit): ").strip()
+            if userInput.lower() == "exit":
+                return
+            try:
+                newEquipment.Id = userInput
+                break
+            except Exception as e:
+                print(f"Error : {e}")
+
+        try:
+            foundEquipment = self.__services.getEquipmentById(newEquipment.Id)
+
+            print("\nCurrent Equipment Information")
+            print("-" * 40)
+            print(f"ID: {foundEquipment.Id}")
+            print(f"[1] Power Rating      : {foundEquipment.powerRating}")
+            print(f"[2] Hourly Rental Rate: {foundEquipment.hourlyRentalRate}")
+            print(f"[3] Status            : {'Available' if foundEquipment.currentStatus else 'Unavailable'}")
+            print(f"[0] Exit")
+            print("-" * 40)
+
+            while True:
+                choice = input("👉 Select field (1-3): ").strip()
+                match choice:
+                    case "1":
+                        value = input("👉 New Power Rating: ")
+                        self.__services.update(foundEquipment.Id,"powerRating",float(value))
+                        break
+                    case "2":
+                        value = input("👉 New Hourly Rental Rate: ")
+                        self.__services.update(foundEquipment.Id, "hourlyRentalRate",float(value))
+                        break
+                    case "3":
+                        value = input("👉 Status (Available/Unavailable): ").strip().lower()
+                        self.__services.update(foundEquipment.Id,"currentStatus",value)
+                        break
+                    case "0":
+                        return
+                    case _:
+                        print("\n❌ Invalid choice. Please try again.")
+                        time.sleep(1.5)
+            print("\n✅ Equipment updated successfully!")
+
+        except Exception as e:
+            print(f"Error : {e}")
+        input("\nPress Enter to continue...")
 
     def sort(self):
         print("\n--- SORT EQUIPMENT ---")
-        print("[1] Sort by Hourly Rental Rate")
-        print("[2] Sort by Power Rating")
-        print("[0] Exit")
-        choice = input("👉 Choose sorting criteria (1 or 2): ").strip()
+        sort_map = {'1': 'hourlyRentalRate', '2': 'powerRating'}
         
         while True:
-            match choice:
-                case '1':
-                    sortType = "hourlyRentalRate"
-                    break
-                case '2':
-                    sortType = "powerRating"
-                    break
-                case '0':
-                    return
-                case _:
-                    print("❌ Invalid choice!")
-        
-        print("\n--- REVERSE ---")
-        print("[1] Yes")
-        print("[2] No")
-        print("[0] Exit")
-        choice = input("👉 Choose reveresed ? (1 or 2): ").strip()
-
-        isReverse = None
-
+            choice = input("👉 Sort by [1] Hourly Rate\n [2] Power Rating\n [0] Exit: ").strip()
+            if choice == '0': 
+                return
+            if choice in sort_map:
+                sortType = sort_map[choice]
+                break
+            print("❌ Invalid choice!")
+            
         while True:
-            match choice:
-                case '1':
-                    isReverse = True
-                    break
-                case '2':
-                    isReverse = False
-                    break
-                case '0':
-                    return
-                case _:
-                    print("❌ Invalid choice!")
+            choice = input("👉 Reverse order? [1] Yes, [2] No, [0] Exit: ").strip()
+            if choice == '0':
+                return
+            if choice in ['1', '2']:
+                isReverse = (choice == '1')
+                break
+            print("❌ Invalid choice!")
         
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
@@ -154,4 +186,31 @@ class equipmentMenu():
         input("\nPress Enter to continue...")
         
     def groupByStatus(self):
-        pass
+        try:
+            availableList, rentedList = (self.__services.groupByStatus())
+
+            print("\n===== AVAILABLE EQUIPMENT =====")
+            if len(availableList) == 0:
+                print("No available equipment.")
+            else:
+                for equipment in availableList:
+                    print("-" * 40)
+                    print(f"ID: {equipment.Id}")
+                    print(f"Power: {equipment.powerRating}")
+                    print(f"Rate: {equipment.hourlyRentalRate}")
+
+
+            print("\n===== RENTED EQUIPMENT =====")
+            if len(rentedList) == 0:
+                print("No rented equipment.")
+            else:
+                for equipment in rentedList:
+                    print("-" * 40)
+                    print(f"ID: {equipment.Id}")
+                    print(f"Power: {equipment.powerRating}")
+                    print(f"Rate: {equipment.hourlyRentalRate}")
+
+        except Exception as e:
+            print(f"Error : {e}")
+        
+        input("\nPress Enter to continue...")
