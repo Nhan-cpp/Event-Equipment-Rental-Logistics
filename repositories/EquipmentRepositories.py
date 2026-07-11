@@ -46,7 +46,7 @@ class EquipmentRepositories():
         except Exception:
             raise ValueError("Error while writing equipment maintenance log")
 
-    def getEquipmentByIndex(self, index: int):
+    def getEquipmentById(self, index: int):
         return self.__equipmentList[index]
 
     def searchById(self, equipmentID):

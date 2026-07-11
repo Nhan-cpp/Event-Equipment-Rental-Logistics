@@ -36,11 +36,11 @@ class EquipmentServices():
         except Exception as e:
             raise ValueError(f"Failed to write maintenance log: {e}")
         
-    def getEquipmentByIndex(self, equipmentID : str) -> Equipment:
+    def getEquipmentById(self, equipmentID : str) -> Equipment:
         index = self.searchById(equipmentID)
         if index == -1:
             raise ValueError(f"Equipment ID not found: {equipmentID}")
-        return self.__repositories.getEquipmentByIndex(index)
+        return self.__repositories.getEquipmentById(index)
     
     def searchById(self,equipmentID):
         return self.__repositories.searchById(equipmentID)
@@ -49,7 +49,7 @@ class EquipmentServices():
         return self.__repositories.searchByStatus(status)
     
     def append(self, new_equipment : Equipment):
-        if self.__repositories.searchById(new_equipment.Id) != -1:
+        if self.searchById(new_equipment.Id) != -1:
             raise ValueError("Equipment ID already exists.")
         if new_equipment.powerRating <= 0 or new_equipment.hourlyRentalRate <= 0:
             raise ValueError("Power rating and hourly rental rate must be greater than 0.") 
