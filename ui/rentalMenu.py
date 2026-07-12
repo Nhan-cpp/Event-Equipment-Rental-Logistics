@@ -4,7 +4,6 @@ from services.RentalServices import RentalServices
 class rentalMenu():
     __services = None
     def __init__(self):
-        super().__init__()
         self.__services = RentalServices()
         try:
             self.__services.loadRentals()

@@ -53,7 +53,7 @@ class mainMenu():
                     self.rtMenu.sort()
                 case '0':
                     print("\n👋 Thank you for using the system. Goodbye!\n")
-                    sys.exit(0)
+                    return
                 case _:
                     print("\n❌ Invalid choice. Please try again.")
                     time.sleep(1.5)
@@ -66,3 +66,4 @@ class mainMenu():
             self.rtMenu.saveRentals()
         except Exception as e:
             print(f"Error : {e}")
+            time.sleep(1.5)

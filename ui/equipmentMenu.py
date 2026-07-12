@@ -45,8 +45,7 @@ class equipmentMenu():
             print(f"ID: {foundEquipment.Id}")
             print(f"Power Rating: {foundEquipment.powerRating}")
             print(f"Hourly Rental Rate: {foundEquipment.hourlyRentalRate}")
-            status_text = "Available" if foundEquipment.currentStatus else "Unavailable"
-            print(f"Status: {status_text}")
+            print(f"Status: {foundEquipment.currentStatus}")
             print("-" * 40)
             
         except Exception as e:
@@ -111,7 +110,7 @@ class equipmentMenu():
             print(f"ID: {foundEquipment.Id}")
             print(f"[1] Power Rating      : {foundEquipment.powerRating}")
             print(f"[2] Hourly Rental Rate: {foundEquipment.hourlyRentalRate}")
-            print(f"[3] Status            : {'Available' if foundEquipment.currentStatus else 'Unavailable'}")
+            print(f"[3] Status            : {foundEquipment.currentStatus}")
             print(f"[0] Exit")
             print("-" * 40)
 
@@ -127,7 +126,7 @@ class equipmentMenu():
                         self.__services.update(foundEquipment.Id, "hourlyRentalRate",float(value))
                         break
                     case "3":
-                        value = input("👉 Status (Available/Unavailable): ").strip().lower()
+                        value = input("👉 Status (Available/Unavailable): ").strip()
                         self.__services.update(foundEquipment.Id,"currentStatus",value)
                         break
                     case "0":
@@ -177,8 +176,7 @@ class equipmentMenu():
             print("-" * 65)
             
             for eq in sorted_list:
-                status_text = "Available" if eq.currentStatus else "Unavailable"
-                print(f"{eq.Id:<15} | {eq.powerRating:<25.0f} | {eq.hourlyRentalRate:<25.0f} | {status_text:<15}")
+                print(f"{eq.Id:<15} | {eq.powerRating:<25.0f} | {eq.hourlyRentalRate:<25.0f} | {eq.currentStatus:<15}")
             print("-" * 65)
             
         except Exception as e:
