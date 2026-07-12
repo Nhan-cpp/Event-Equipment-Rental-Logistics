@@ -191,7 +191,7 @@ class equipmentMenu():
         sort_map = {'1': 'hourlyRentalRate', '2': 'powerRating'}
         
         while True:
-            choice = input("👉 Sort by [1] Hourly Rate\n [2] Power Rating\n [0] Exit: ").strip()
+            choice = input("👉 Sort by\n [1] Hourly Rate\n [2] Power Rating\n [0] Exit: ").strip()
             if choice == '0': 
                 return
             if choice in sort_map:
@@ -200,7 +200,7 @@ class equipmentMenu():
             print("❌ Invalid choice!")
             
         while True:
-            choice = input("👉 Reverse order? [1] Yes, [2] No, [0] Exit: ").strip()
+            choice = input("👉 Reverse order?\n [1] Yes\n [2] No\n [0] Exit: ").strip()
             if choice == '0':
                 return
             if choice in ['1', '2']:
