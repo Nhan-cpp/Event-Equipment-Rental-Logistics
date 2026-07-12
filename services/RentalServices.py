@@ -38,12 +38,6 @@ class RentalServices():
         except Exception as e:
             raise ValueError(f"Failed to write rental history log: {e}")
 
-    def getRentalByIndex(self, RentalID : str) -> Rental:
-        index = self.searchById(RentalID)
-        if index == -1:
-            raise ValueError(f"Rental ID not found: {RentalID}")
-        return self.__repositories.getRentalByIndex(index)
-    
     def searchById(self, rentalID):
         try:
             rentalID = str(rentalID)
@@ -51,11 +45,11 @@ class RentalServices():
         except:
             raise ValueError("Rental ID must be a string.")
             
-    def getRentalByIndex(self, rentalID: str) -> Rental:
+    def getRentalById(self, rentalID: str) -> Rental:
         index = self.searchById(rentalID)
         if index == -1:
             raise ValueError(f"Rental ID not found: {rentalID}")
-        return self.__repositories.getRentalByIndex(index)
+        return self.__repositories.getRentalById(index)
         
     def append(self,new_rental : Rental):
         if self.__repositories.searchById(new_rental.Id) != -1:
