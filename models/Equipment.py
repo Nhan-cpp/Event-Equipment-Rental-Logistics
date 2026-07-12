@@ -54,7 +54,7 @@ class Equipment():
         self._hourlyRentalRate = new_value
     @property
     def currentStatus(self):
-        return "Available" if self._currentStatus else "Unavailable"
+        return "Available" if self._currentStatus else "Rented"
         
     @currentStatus.setter
     def currentStatus(self,new_value):
@@ -66,10 +66,10 @@ class Equipment():
             val = str(new_value).strip().lower()
             mapping = {
                 'available': True,
-                'unavailable': False,
+                'rented': False,
             }
             if val not in mapping:
                 raise ValueError
             self._currentStatus = mapping[val]
         except:
-            raise ValueError("Equipment current status need be Available / Unavailable.")
+            raise ValueError("Equipment current status need be Available / Rented.")

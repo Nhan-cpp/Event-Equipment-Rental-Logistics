@@ -51,9 +51,55 @@ class equipmentMenu():
         except Exception as e:
             print(f"❌ Error : {e}")
         input("\nPress Enter to continue...")
-                        
+    
+    def __AvailableEquipment_display(self,availableList):
+            print("\n===== AVAILABLE EQUIPMENT =====")
+            if len(availableList) == 0:
+                print("No available equipment.")
+            else:
+                for equipment in availableList:
+                    print("-" * 40)
+                    print(f"ID: {equipment.Id}")
+                    print(f"Power: {equipment.powerRating}")
+                    print(f"Rate: {equipment.hourlyRentalRate}")
+    def __RentedEquipment_display(self,rentedList):
+        print("\n===== RENTED EQUIPMENT =====")
+        if len(rentedList) == 0:
+            print("No rented equipment.")
+        else:
+            for equipment in rentedList:
+                print("-" * 40)
+                print(f"ID: {equipment.Id}")
+                print(f"Power: {equipment.powerRating}")
+                print(f"Rate: {equipment.hourlyRentalRate}")
+                
     def searchByStatus(self):
-        pass
+        try:
+            availableList, rentedList = (self.__services.groupByStatus())
+        except Exception as e:
+            print(f"Error : {e}")
+        
+        choice = None
+        while True:
+            print(f"[1] Available")
+            print(f"[2] Rented")
+            print(f"[0] Exit")
+            choice = input("👉 Enter your choice: ").strip()
+            
+            match choice:
+                case '1':
+                    self.__AvailableEquipment_display(availableList)
+                    break
+                case '2':
+                    self.__RentedEquipment_display(rentedList)
+                    break
+                case '0':
+                    return
+                case _:
+                    print("\n❌ Invalid choice. Please try again.")
+                    time.sleep(1.5)
+        
+        input("\nPress Enter to continue...")
 
     def append(self):
         newEquipment = Equipment()
@@ -126,7 +172,7 @@ class equipmentMenu():
                         self.__services.update(foundEquipment.Id, "hourlyRentalRate",float(value))
                         break
                     case "3":
-                        value = input("👉 Status (Available/Unavailable): ").strip()
+                        value = input("👉 Status (Available/Rented): ").strip()
                         self.__services.update(foundEquipment.Id,"currentStatus",value)
                         break
                     case "0":
@@ -186,29 +232,10 @@ class equipmentMenu():
     def groupByStatus(self):
         try:
             availableList, rentedList = (self.__services.groupByStatus())
-
-            print("\n===== AVAILABLE EQUIPMENT =====")
-            if len(availableList) == 0:
-                print("No available equipment.")
-            else:
-                for equipment in availableList:
-                    print("-" * 40)
-                    print(f"ID: {equipment.Id}")
-                    print(f"Power: {equipment.powerRating}")
-                    print(f"Rate: {equipment.hourlyRentalRate}")
-
-
-            print("\n===== RENTED EQUIPMENT =====")
-            if len(rentedList) == 0:
-                print("No rented equipment.")
-            else:
-                for equipment in rentedList:
-                    print("-" * 40)
-                    print(f"ID: {equipment.Id}")
-                    print(f"Power: {equipment.powerRating}")
-                    print(f"Rate: {equipment.hourlyRentalRate}")
-
         except Exception as e:
             print(f"Error : {e}")
-        
+
+        self.__AvailableEquipment_display(availableList)
+        self.__RentedEquipment_display(rentedList)
+
         input("\nPress Enter to continue...")
