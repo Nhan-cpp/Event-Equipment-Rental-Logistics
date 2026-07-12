@@ -1,4 +1,3 @@
-from utils.utils import validate_ID
 from datetime import datetime
 
 class Rental():

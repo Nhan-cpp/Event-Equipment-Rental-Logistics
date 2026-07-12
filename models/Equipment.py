@@ -1,4 +1,3 @@
-from utils.utils import validate_ID
 
 class Equipment():
     _Id = None
@@ -55,16 +54,22 @@ class Equipment():
         self._hourlyRentalRate = new_value
     @property
     def currentStatus(self):
-        return self._currentStatus
+        return "Available" if self._currentStatus else "Unavailable"
+        
     @currentStatus.setter
     def currentStatus(self,new_value):
         try:
-            new_value = str(new_value).strip().lower()
-            mapping = dict({
-                'available' : True,
-                'unavailable' : False,
-            })
-            self._currentStatus = mapping[new_value]
+            if isinstance(new_value, bool):
+                self._currentStatus = new_value
+                return
+                
+            val = str(new_value).strip().lower()
+            mapping = {
+                'available': True,
+                'unavailable': False,
+            }
+            if val not in mapping:
+                raise ValueError
+            self._currentStatus = mapping[val]
         except:
             raise ValueError("Equipment current status need be Available / Unavailable.")
-    

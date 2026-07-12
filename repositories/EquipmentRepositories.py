@@ -20,7 +20,7 @@ class EquipmentRepositories():
                         continue
                     parts = line.split(',')
                     
-                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),(parts[3] == 'True'))
+                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),parts[3])
                     equipmentList.append(equipment)
         except FileNotFoundError:
             raise ValueError("Equipment file not found. Start with empty list.")
@@ -90,7 +90,7 @@ class EquipmentRepositories():
         rentedList = []
 
         for equipment in self.__equipmentList:
-            if equipment.currentStatus:
+            if equipment.currentStatus == "Available":
                 availableList.append(equipment)
             else:
                 rentedList.append(equipment)

@@ -1,26 +1,26 @@
-def validate_ID(ID):
-    if not ID:
-        return False
+# def validate_ID(ID):
+#     if not ID:
+#         return False
 
-    for character in ID:
-        if not character.isalnum():
-            return False
+#     for character in ID:
+#         if not character.isalnum():
+#             return False
 
-    return True
+#     return True
 
-def validate_positiveValue(value, fieldName):
-    if value <= 0:
-        print(f"{fieldName} must be greater than 0")
-        return False
+# def validate_positiveValue(value, fieldName):
+#     if value <= 0:
+#         print(f"{fieldName} must be greater than 0")
+#         return False
 
-    return True
+#     return True
 
-def validate_expectedReturnTime(startTime, expectedReturnTime):
-    if expectedReturnTime <= startTime:
-        print("Expected return time must be after start time")
-        return False
+# def validate_expectedReturnTime(startTime, expectedReturnTime):
+#     if expectedReturnTime <= startTime:
+#         print("Expected return time must be after start time")
+#         return False
 
-    return True
+#     return True
 
 
 def input_value(message, converter, validator, fieldName):
