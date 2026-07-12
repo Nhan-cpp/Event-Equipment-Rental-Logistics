@@ -56,6 +56,7 @@ class EquipmentServices():
 
         try:
             self.__repositories.append(new_equipment)
+            self.writeEquipmentMaintenanceLog(new_equipment, "Added new equipment")
         except Exception as e:
             raise ValueError(f"Failed to add equipment: {e}")
 
@@ -74,6 +75,8 @@ class EquipmentServices():
                 
         try:
             self.__repositories.update(index, selectedField, newValue)
+            updated_equipment = self.__repositories.getEquipmentById(index)
+            self.writeEquipmentMaintenanceLog(updated_equipment, f"Updated {selectedField} to {newValue}")
         except Exception as e:
             raise ValueError(f"Failed to update equipment: {e}")
     

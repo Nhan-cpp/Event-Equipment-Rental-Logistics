@@ -59,6 +59,7 @@ class RentalServices():
         
         try:
             self.__repositories.append(new_rental)
+            self.writeRentalHistoryLog(new_rental)
         except Exception as e:
             raise ValueError(f"Failed to add rental record: {e}")
         
