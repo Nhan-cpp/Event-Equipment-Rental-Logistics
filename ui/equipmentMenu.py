@@ -65,12 +65,6 @@ class equipmentMenu():
                 print(f"| {eq.Id:<20} | {eq.powerRating:>12.2f} | {eq.hourlyRentalRate:>12.2f} | {eq.currentStatus:<12} |")
         print(f"{'=' * 75}")
         print(f"  Total: {len(equipmentList)} record(s)")
-
-    def __AvailableEquipment_display(self,availableList):
-        self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT")
-
-    def __RentedEquipment_display(self,rentedList):
-        self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT")
                 
     def searchByStatus(self):
         try:
@@ -233,7 +227,7 @@ class equipmentMenu():
         except Exception as e:
             print(f"Error : {e}")
 
-        self.__AvailableEquipment_display(availableList)
-        self.__RentedEquipment_display(rentedList)
+        self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT")
+        self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT")
 
         input("\nPress Enter to continue...")
