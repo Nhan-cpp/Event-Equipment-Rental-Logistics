@@ -52,26 +52,25 @@ class equipmentMenu():
             print(f"❌ Error : {e}")
         input("\nPress Enter to continue...")
     
-    def __AvailableEquipment_display(self,availableList):
-            print("\n===== AVAILABLE EQUIPMENT =====")
-            if len(availableList) == 0:
-                print("No available equipment.")
-            else:
-                for equipment in availableList:
-                    print("-" * 40)
-                    print(f"ID: {equipment.Id}")
-                    print(f"Power: {equipment.powerRating}")
-                    print(f"Rate: {equipment.hourlyRentalRate}")
-    def __RentedEquipment_display(self,rentedList):
-        print("\n===== RENTED EQUIPMENT =====")
-        if len(rentedList) == 0:
-            print("No rented equipment.")
+    def __printEquipmentTable(self, equipmentList, title):
+        print(f"\n{'=' * 75}")
+        print(f" {title} ".center(75))
+        print(f"{'=' * 75}")
+        if len(equipmentList) == 0:
+            print("  (Empty)")
         else:
-            for equipment in rentedList:
-                print("-" * 40)
-                print(f"ID: {equipment.Id}")
-                print(f"Power: {equipment.powerRating}")
-                print(f"Rate: {equipment.hourlyRentalRate}")
+            print(f"| {'ID':<20} | {'Power Rating':>12} | {'Hourly Rate':>12} | {'Status':<12} |")
+            print(f"|{'-' * 22}|{'-' * 14}|{'-' * 14}|{'-' * 14}|")
+            for eq in equipmentList:
+                print(f"| {eq.Id:<20} | {eq.powerRating:>12.2f} | {eq.hourlyRentalRate:>12.2f} | {eq.currentStatus:<12} |")
+        print(f"{'=' * 75}")
+        print(f"  Total: {len(equipmentList)} record(s)")
+
+    def __AvailableEquipment_display(self,availableList):
+        self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT")
+
+    def __RentedEquipment_display(self,rentedList):
+        self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT")
                 
     def searchByStatus(self):
         try:
@@ -214,16 +213,15 @@ class equipmentMenu():
             if not sorted_list:
                 print("No equipment found to sort or invalid criteria.")
                 return
-
-          
-            print(f"\n✅ Sort Equipment successfully! (By {sortType})")
-            print("-" * 65)
-            print(f"{'ID'} | {'Power'} | {'Rate'} | {'Status'}")
-            print("-" * 65)
             
+            print(f"\n✅ Sort Equipment successfully! (By {sortType})")
+            print(f"{'=' * 75}")
+            print(f"| {'ID':<20} | {'Power Rating':>12} | {'Hourly Rate':>12} | {'Status':<12} |")
+            print(f"|{'-' * 22}|{'-' * 14}|{'-' * 14}|{'-' * 14}|")
             for eq in sorted_list:
-                print(f"{eq.Id:<15} | {eq.powerRating:<25.0f} | {eq.hourlyRentalRate:<25.0f} | {eq.currentStatus:<15}")
-            print("-" * 65)
+                print(f"| {eq.Id:<20} | {eq.powerRating:>12.2f} | {eq.hourlyRentalRate:>12.2f} | {eq.currentStatus:<12} |")
+            print(f"{'=' * 75}")
+            print(f"  Total: {len(sorted_list)} record(s)")
             
         except Exception as e:
             print(f"❌ Error : {e}")

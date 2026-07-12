@@ -12,7 +12,12 @@ class Rental():
         self._clientName = clientName
         self._startTime = startTime if startTime is not None else datetime.now()
         self._expectedReturnTime = expectedReturnTime if expectedReturnTime is not None else datetime.now()
-    
+
+    def __str__(self):
+        start_str = self._startTime.strftime("%d/%m/%Y %H:%M") if self._startTime else ""
+        return_str = self._expectedReturnTime.strftime("%d/%m/%Y %H:%M") if self._expectedReturnTime else ""
+        return f"ID: {self._Id} | Client: {self._clientName} | Start: {start_str} | Return: {return_str}"
+
     @property
     def Id(self):
         return self._Id
@@ -57,4 +62,4 @@ class Rental():
         except ValueError as e:
             raise e
         except:
-            raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")        
+            raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")

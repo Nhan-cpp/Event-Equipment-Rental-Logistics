@@ -128,10 +128,15 @@ class rentalMenu():
                 return
 
             print(f"\n✅ Sort Rental successfully! (By {sortType})")
-            print("-" * 65)
-            for rental in sorted_list:
-                print(rental)
-            print("-" * 65)
+            print(f"{'=' * 85}")
+            print(f"| {'ID':<20} | {'Client Name':<20} | {'Start Time':<16} | {'Return Time':<16} |")
+            print(f"|{'-' * 22}|{'-' * 22}|{'-' * 18}|{'-' * 18}|")
+            for rt in sorted_list:
+                start_str = rt.startTime.strftime('%d/%m/%Y %H:%M') if rt.startTime else ''
+                return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H:%M') if rt.expectedReturnTime else ''
+                print(f"| {rt.Id:<20} | {rt.clientName:<20} | {start_str:<16} | {return_str:<16} |")
+            print(f"{'=' * 85}")
+            print(f"  Total: {len(sorted_list)} record(s)")
             
         except Exception as e:
             print(f"❌ Error : {e}")

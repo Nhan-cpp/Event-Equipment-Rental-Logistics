@@ -12,6 +12,10 @@ class Equipment():
         self._powerRating = powerRating
         self._hourlyRentalRate = hourlyRentalRate
         self._currentStatus = currentStatus
+
+    def __str__(self):
+        return f"ID: {self._Id} | Power: {self._powerRating} | Rate: {self._hourlyRentalRate} | Status: {self.currentStatus}"
+
     
     @property
     def Id(self):
