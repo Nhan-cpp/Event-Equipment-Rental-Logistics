@@ -20,7 +20,7 @@ class EquipmentRepositories():
                         continue
                     parts = line.split(',')
                     
-                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),parts[3])
+                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),(parts[3] == 'True'))
                     equipmentList.append(equipment)
         except FileNotFoundError:
             raise ValueError("Equipment file not found. Start with empty list.")
@@ -30,7 +30,8 @@ class EquipmentRepositories():
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for equipment in self.__equipmentList:
-                    line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus}\n"
+                    bool_status = equipment._currentStatus
+                    line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{bool_status}\n"
                     file.write(line)
             
         except Exception:
@@ -40,7 +41,8 @@ class EquipmentRepositories():
         try:
             with open(self.MAINTENANCE_FILE_PATH, 'a', encoding='utf-8') as file:
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus},{action},{current_time}\n"
+                bool_status = equipment._currentStatus
+                line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{bool_status},{action},{current_time}\n"
                 file.write(line)
             return True
         except Exception:

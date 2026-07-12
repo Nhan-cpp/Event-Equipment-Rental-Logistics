@@ -56,18 +56,15 @@ class RentalRepositories():
         except Exception:
             raise ValueError("Error while writing rental history log")
 
-    def getRentalByIndex(self, index: int):
+    def getRentalById(self, index: int):
         return self.__rentalList[index]
 
     def searchById(self, rentalId):
-        for index in range(len(self.__rental_list)):
-            if self.__rental_list[index].ID == rentalId:
+        for index in range(len(self.__rentalList)):
+            if self.__rentalList[index].Id == rentalId:
                 return index
         return -1
     
-    def getRentalByIndex(self, index: int):
-        return self.__rentalList[index]
-        
     def append(self, rental):
         self.__rentalList.append(rental)
 
@@ -90,7 +87,7 @@ class RentalRepositories():
             late_penalty = 0
 
         total_fee = base_fee + late_penalty
-        return total_fee
+        return base_fee, late_penalty, total_fee
     
     def sort(self, sort_type, is_reverse=False):
         
