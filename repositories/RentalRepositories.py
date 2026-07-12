@@ -56,6 +56,16 @@ class RentalRepositories():
         except Exception:
             raise ValueError("Error while writing rental history log")
 
+    def readRentalHistoryLog(self):
+        logs = []
+        try:
+            with open(self.HISTORY_FILE_PATH, 'r', encoding='utf-8') as file:
+                for line in file:
+                    logs.append(line.strip())
+            return logs
+        except FileNotFoundError:
+            return []
+
     def getRentalById(self, index: int):
         return self.__rentalList[index]
 

@@ -1,0 +1,2 @@
+21,1.0,2.0,True,Added new equipment,12/07/2026 23:19:58
+3,2.0,0.3,False,Updated currentStatus to Rented,12/07/2026 23:20:17

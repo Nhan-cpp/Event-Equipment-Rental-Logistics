@@ -16,8 +16,18 @@ class rentalMenu():
         except ValueError as e:
             print(f"Error saving: {e}")
 
-    def writeRentalHistoryLog(self):
-        pass
+    def printRentalHistoryLog(self):
+        print("\n--- RENTAL HISTORY LOG ---")
+        try:
+            logs = self.__services.readRentalHistoryLog()
+            if not logs:
+                print("No rental history logs found.")
+            else:
+                for log in logs:
+                    print(log)
+        except Exception as e:
+            print(f"❌ Error : {e}")
+        input("\nPress Enter to continue...")
 
     def searchById(self):
         newRental = Rental()

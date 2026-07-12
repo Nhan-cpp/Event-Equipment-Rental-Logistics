@@ -35,6 +35,10 @@ class EquipmentServices():
             self.__repositories.writeEquipmentMaintenanceLog(equipment, action)
         except Exception as e:
             raise ValueError(f"Failed to write maintenance log: {e}")
+            
+    def readEquipmentMaintenanceLog(self):
+        self.__ensure_file_exists(EquipmentRepositories.MAINTENANCE_FILE_PATH)
+        return self.__repositories.readEquipmentMaintenanceLog()
         
     def getEquipmentById(self, equipmentID : str) -> Equipment:
         index = self.searchById(equipmentID)

@@ -24,6 +24,9 @@ class mainMenu():
         print("  [7] Add New Rental Record")
         print("  [8] Calculate Rental Fees & Penalties")
         print("  [9] View & Sort Rental List")
+        print(" --- LOGS OPTIONS ---")
+        print("  [10] View Equipment Maintenance Log")
+        print("  [11] View Rental History Log")
         print("  [0] Exit")
         print("-" * 60)
 
@@ -51,6 +54,10 @@ class mainMenu():
                     self.rtMenu.calculateFeesAndLatePenalties()
                 case '9':
                     self.rtMenu.sort()
+                case '10':
+                    self.eqMenu.printEquipmentMaintenanceLog()
+                case '11':
+                    self.rtMenu.printRentalHistoryLog()
                 case '0':
                     print("\n👋 Thank you for using the system. Goodbye!\n")
                     return

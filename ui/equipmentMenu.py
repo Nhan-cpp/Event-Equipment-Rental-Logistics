@@ -18,8 +18,18 @@ class equipmentMenu():
         except ValueError as e:
             print(f"Error saving: {e}")
 
-    def writeEquipmentMaintenanceLog(self):
-        pass
+    def printEquipmentMaintenanceLog(self):
+        print("\n--- EQUIPMENT MAINTENANCE LOG ---")
+        try:
+            logs = self.__services.readEquipmentMaintenanceLog()
+            if not logs:
+                print("No maintenance logs found.")
+            else:
+                for log in logs:
+                    print(log)
+        except Exception as e:
+            print(f"❌ Error : {e}")
+        input("\nPress Enter to continue...")
 
     def searchById(self):
         newEquipment = Equipment()

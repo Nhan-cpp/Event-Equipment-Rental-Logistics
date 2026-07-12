@@ -48,6 +48,16 @@ class EquipmentRepositories():
         except Exception:
             raise ValueError("Error while writing equipment maintenance log")
 
+    def readEquipmentMaintenanceLog(self):
+        logs = []
+        try:
+            with open(self.MAINTENANCE_FILE_PATH, 'r', encoding='utf-8') as file:
+                for line in file:
+                    logs.append(line.strip())
+            return logs
+        except FileNotFoundError:
+            return []
+
     def getEquipmentById(self, index: int):
         return self.__equipmentList[index]
 

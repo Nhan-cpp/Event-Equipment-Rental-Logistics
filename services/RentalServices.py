@@ -38,6 +38,10 @@ class RentalServices():
         except Exception as e:
             raise ValueError(f"Failed to write rental history log: {e}")
 
+    def readRentalHistoryLog(self):
+        self.__ensure_file_exists(RentalRepositories.HISTORY_FILE_PATH)
+        return self.__repositories.readRentalHistoryLog()
+
     def searchById(self, rentalID):
         try:
             rentalID = str(rentalID)
