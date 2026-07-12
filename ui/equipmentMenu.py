@@ -19,14 +19,25 @@ class equipmentMenu():
             print(f"Error saving: {e}")
 
     def printEquipmentMaintenanceLog(self):
-        print("\n--- EQUIPMENT MAINTENANCE LOG ---")
         try:
             logs = self.__services.readEquipmentMaintenanceLog()
+            print(f"\n{'=' * 125}")
+            print(f" EQUIPMENT MAINTENANCE LOG ".center(125))
+            print(f"{'=' * 125}")
+            
             if not logs:
-                print("No maintenance logs found.")
+                print("  (Empty)")
             else:
+                print(f"| {'ID':<15} | {'Power':>8} | {'Rate':>8} | {'Status':<10} | {'Action':<40} | {'Timestamp':<20} |")
+                print(f"|{'-' * 17}|{'-' * 10}|{'-' * 10}|{'-' * 12}|{'-' * 42}|{'-' * 22}|")
                 for log in logs:
-                    print(log)
+                    parts = log.split(',')
+                    if len(parts) >= 6:
+                        # parts: ID, power, rate, status, action, timestamp
+                        print(f"| {parts[0]:<15} | {float(parts[1]):>8.2f} | {float(parts[2]):>8.2f} | {parts[3]:<10} | {parts[4]:<40} | {parts[5]:<20} |")
+            print(f"{'=' * 125}")
+            print(f"  Total: {len(logs)} record(s)")
+            
         except Exception as e:
             print(f"❌ Error : {e}")
         input("\nPress Enter to continue...")

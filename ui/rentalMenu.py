@@ -17,14 +17,25 @@ class rentalMenu():
             print(f"Error saving: {e}")
 
     def printRentalHistoryLog(self):
-        print("\n--- RENTAL HISTORY LOG ---")
         try:
             logs = self.__services.readRentalHistoryLog()
+            print(f"\n{'=' * 115}")
+            print(f" RENTAL HISTORY LOG ".center(115))
+            print(f"{'=' * 115}")
+            
             if not logs:
-                print("No rental history logs found.")
+                print("  (Empty)")
             else:
+                print(f"| {'ID':<15} | {'Client Name':<25} | {'Start Time':<16} | {'Return Time':<16} | {'Timestamp':<20} |")
+                print(f"|{'-' * 17}|{'-' * 27}|{'-' * 18}|{'-' * 18}|{'-' * 22}|")
                 for log in logs:
-                    print(log)
+                    parts = log.split(',')
+                    if len(parts) >= 5:
+                        # parts: ID, Client, Start Time, Return Time, Timestamp
+                        print(f"| {parts[0]:<15} | {parts[1]:<25} | {parts[2]:<16} | {parts[3]:<16} | {parts[4]:<20} |")
+            print(f"{'=' * 115}")
+            print(f"  Total: {len(logs)} record(s)")
+            
         except Exception as e:
             print(f"❌ Error : {e}")
         input("\nPress Enter to continue...")
