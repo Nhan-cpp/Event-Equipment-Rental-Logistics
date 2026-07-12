@@ -37,15 +37,19 @@ class Rental():
     @startTime.setter
     def startTime(self,new_value):
         try:
+            if isinstance(new_value, str):
+                new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
             self._startTime = new_value
         except:
-            raise ValueError("Invalid return time format.")
+            raise ValueError("Invalid start time format. Use dd/mm/yyyy HH:MM")
     @property
     def expectedReturnTime(self):
         return self._expectedReturnTime
     @expectedReturnTime.setter
     def expectedReturnTime(self,new_value):
         try:
+            if isinstance(new_value, str):
+                new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
             if self._startTime and new_value:
                 if self._startTime > new_value:
                     raise ValueError("Expected return time must be later than start time.")
@@ -53,4 +57,4 @@ class Rental():
         except ValueError as e:
             raise e
         except:
-            raise ValueError("Invalid return time format.")        
+            raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")        
