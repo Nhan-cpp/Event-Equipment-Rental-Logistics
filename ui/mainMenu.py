@@ -1,5 +1,6 @@
 from ui.equipmentMenu import equipmentMenu
 from ui.rentalMenu import rentalMenu
+from utils.ui_utils import *
 import sys
 import time
 import os
@@ -10,31 +11,38 @@ class mainMenu():
         self.rtMenu = rentalMenu()
 
     def __printMenu(self):
-        print("\n" + "="*60)
-        print("🌟 EVENT EQUIPMENT RENTAL LOGISTICS SYSTEM 🌟".center(60))
-        print("="*60)
-        print(" --- EQUIPMENT OPTIONS ---")
-        print("  [1] Add New Equipment")
-        print("  [2] Update Equipment Information")
-        print("  [3] Search Equipment By ID")
-        print("  [4] Search Equipment By Status")
-        print("  [5] View & Group equipment by rental status")
-        print("  [6] View & Sort Equipment List")
-        print(" --- RENTAL OPTIONS ---")
-        print("  [7] Add New Rental Record")
-        print("  [8] Calculate Rental Fees & Penalties")
-        print("  [9] View & Sort Rental List")
-        print(" --- LOGS OPTIONS ---")
-        print("  [10] View Equipment Maintenance Log")
-        print("  [11] View Rental History Log")
-        print("  [0] Exit")
-        print("-" * 60)
+        print(f"\n{BOLD}{YELLOW}       EVENT EQUIPMENT RENTAL LOGISTICS SYSTEM{RESET}\n")
+
+        UI_Card_Start("EQUIPMENT OPTIONS", CYAN)
+        UI_Menu_Item(1, "Add New Equipment", CYAN)
+        UI_Menu_Item(2, "Update Equipment Information", CYAN)
+        UI_Menu_Item(3, "Search Equipment By ID", CYAN)
+        UI_Menu_Item(4, "Search Equipment By Status", CYAN)
+        UI_Menu_Item(5, "View & Group By Rental Status", CYAN)
+        UI_Menu_Item(6, "View & Sort Equipment List", CYAN)
+        UI_Card_End(CYAN)
+
+        UI_Card_Start("RENTAL OPTIONS", GREEN)
+        UI_Menu_Item(7, "Add New Rental Record", GREEN)
+        UI_Menu_Item(8, "Calculate Rental Fees & Penalties", GREEN)
+        UI_Menu_Item(9, "View & Sort Rental List", GREEN)
+        UI_Card_End(GREEN)
+
+        UI_Card_Start("LOGS OPTIONS", MAGENTA)
+        UI_Menu_Item(10, "View Equipment Maintenance Log", MAGENTA)
+        UI_Menu_Item(11, "View Rental History Log", MAGENTA)
+        UI_Card_End(MAGENTA)
+
+        UI_Divider(YELLOW)
+        UI_Menu_Item(0, "EXIT", YELLOW)
+        UI_Card_End(YELLOW)
 
     def display(self):
         while True:
             self.__printMenu()
             
-            choice = input("👉 Your choice: ").strip()
+            print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
+            choice = input().strip()
             match choice:
                 case '1':
                     self.eqMenu.append()
@@ -59,10 +67,10 @@ class mainMenu():
                 case '11':
                     self.rtMenu.printRentalHistoryLog()
                 case '0':
-                    print("\n👋 Thank you for using the system. Goodbye!\n")
+                    print(f"\n{BRIGHT_CYAN}  ✔ LOGGED OUT SUCCESSFULLY! Goodbye!{RESET}\n")
                     return
                 case _:
-                    print("\n❌ Invalid choice. Please try again.")
+                    UI_Error("Invalid choice. Please try again.")
                     time.sleep(1.5)
 
             os.system('cls')
@@ -72,5 +80,5 @@ class mainMenu():
             self.eqMenu.saveEquipments()
             self.rtMenu.saveRentals()
         except Exception as e:
-            print(f"Error : {e}")
+            UI_Error(f"Save failed: {e}")
             time.sleep(1.5)

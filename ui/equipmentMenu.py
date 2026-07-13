@@ -1,5 +1,6 @@
 from models.Equipment import Equipment
 from services.EquipmentServices import EquipmentServices
+from utils.ui_utils import *
 import time
 import os
 
@@ -10,245 +11,307 @@ class equipmentMenu():
         try:
             self.__services.loadEquipments()
         except ValueError as e:
-            print(f"Warning: {e}")
+            UI_Warning(f"{e}")
 
     def saveEquipments(self):
         try:
             self.__services.saveEquipments()
         except ValueError as e:
-            print(f"Error saving: {e}")
+            UI_Error(f"Error saving: {e}")
+
+    # ─── Equipment Table Constants ───
+    __EQ_HEADERS = ["ID", "Power Rating", "Hourly Rate", "Status"]
+    __EQ_WIDTHS  = [20, 12, 12, 12]
+
+    def __printEquipmentTable(self, equipmentList, title, color=CYAN):
+        UI_Header(title, color)
+        if len(equipmentList) == 0:
+            print(f"  {BRIGHT_BLACK}(Empty){RESET}")
+        else:
+            UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, color)
+            for eq in equipmentList:
+                values = [
+                    eq.Id,
+                    f"{eq.powerRating:.2f}",
+                    f"{eq.hourlyRentalRate:.2f}",
+                    eq.currentStatus
+                ]
+                UI_Table_Row(values, self.__EQ_WIDTHS, color)
+            UI_Table_End(self.__EQ_WIDTHS, color)
+        UI_Table_Total(len(equipmentList))
+
+    # ─── Maintenance Log ───
+    __LOG_HEADERS = ["ID", "Power", "Rate", "Status", "Action", "Timestamp"]
+    __LOG_WIDTHS  = [15, 8, 8, 10, 35, 20]
 
     def printEquipmentMaintenanceLog(self):
         try:
             logs = self.__services.readEquipmentMaintenanceLog()
-            print(f"\n{'=' * 125}")
-            print(f" EQUIPMENT MAINTENANCE LOG ".center(125))
-            print(f"{'=' * 125}")
+            UI_Header("EQUIPMENT MAINTENANCE LOG", MAGENTA)
             
             if not logs:
-                print("  (Empty)")
+                print(f"  {BRIGHT_BLACK}(Empty){RESET}")
             else:
-                print(f"| {'ID':<15} | {'Power':>8} | {'Rate':>8} | {'Status':<10} | {'Action':<40} | {'Timestamp':<20} |")
-                print(f"|{'-' * 17}|{'-' * 10}|{'-' * 10}|{'-' * 12}|{'-' * 42}|{'-' * 22}|")
+                UI_Table_Header(self.__LOG_HEADERS, self.__LOG_WIDTHS, MAGENTA)
                 for log in logs:
                     parts = log.split(',')
                     if len(parts) >= 6:
-                        # parts: ID, power, rate, status, action, timestamp
-                        print(f"| {parts[0]:<15} | {float(parts[1]):>8.2f} | {float(parts[2]):>8.2f} | {parts[3]:<10} | {parts[4]:<40} | {parts[5]:<20} |")
-            print(f"{'=' * 125}")
-            print(f"  Total: {len(logs)} record(s)")
+                        values = [
+                            parts[0],
+                            f"{float(parts[1]):.2f}",
+                            f"{float(parts[2]):.2f}",
+                            parts[3],
+                            parts[4],
+                            parts[5]
+                        ]
+                        UI_Table_Row(values, self.__LOG_WIDTHS, MAGENTA)
+                UI_Table_End(self.__LOG_WIDTHS, MAGENTA)
+            UI_Table_Total(len(logs))
             
         except Exception as e:
-            print(f"❌ Error : {e}")
-        input("\nPress Enter to continue...")
+            UI_Error(f"{e}")
+        UI_Return_Prompt()
 
+    # ─── Search By ID ───
     def searchById(self):
+        UI_Header("SEARCH EQUIPMENT BY ID", CYAN)
         newEquipment = Equipment()
         
-        fields = [("Id", "👉 Enter Equipment ID")]
-        for attr_name, prompt in fields:
-            while True:
-                userInput = input(f"{prompt} (Type 'exit' to exit): ").strip()
-                if userInput == 'exit':
-                    return
-                try:
-                    setattr(newEquipment, attr_name, userInput)
-                    break 
-                except Exception as e:
-                    print(f"❌ Error : {e}")
+        while True:
+            UI_Prompt("Equipment ID")
+            userInput = input().strip()
+            if userInput.lower() == 'exit':
+                return
+            try:
+                newEquipment.Id = userInput
+                break 
+            except Exception as e:
+                UI_Error(f"{e}")
 
         try:
-          
-            foundEquipment = self.__services.getEquipmentById(newEquipment.Id)
+            eq = self.__services.getEquipmentById(newEquipment.Id)
             
-            print("\n✅ Search equipment successfully!")
-            print("-" * 40)
-            print(f"ID: {foundEquipment.Id}")
-            print(f"Power Rating: {foundEquipment.powerRating}")
-            print(f"Hourly Rental Rate: {foundEquipment.hourlyRentalRate}")
-            print(f"Status: {foundEquipment.currentStatus}")
-            print("-" * 40)
+            UI_Success("Equipment found!")
+            info_headers = ["Field", "Value"]
+            info_widths  = [20, 26]
+            UI_Table_Header(info_headers, info_widths, CYAN)
+            UI_Table_Row(["ID", str(eq.Id)], info_widths, CYAN)
+            UI_Table_Row(["Power Rating", str(eq.powerRating)], info_widths, CYAN)
+            UI_Table_Row(["Hourly Rate", str(eq.hourlyRentalRate)], info_widths, CYAN)
+            UI_Table_Row(["Status", str(eq.currentStatus)], info_widths, CYAN)
+            UI_Table_End(info_widths, CYAN)
             
         except Exception as e:
-            print(f"❌ Error : {e}")
-        input("\nPress Enter to continue...")
+            UI_Error(f"{e}")
+        UI_Return_Prompt()
     
-    def __printEquipmentTable(self, equipmentList, title):
-        print(f"\n{'=' * 75}")
-        print(f" {title} ".center(75))
-        print(f"{'=' * 75}")
-        if len(equipmentList) == 0:
-            print("  (Empty)")
-        else:
-            print(f"| {'ID':<20} | {'Power Rating':>12} | {'Hourly Rate':>12} | {'Status':<12} |")
-            print(f"|{'-' * 22}|{'-' * 14}|{'-' * 14}|{'-' * 14}|")
-            for eq in equipmentList:
-                print(f"| {eq.Id:<20} | {eq.powerRating:>12.2f} | {eq.hourlyRentalRate:>12.2f} | {eq.currentStatus:<12} |")
-        print(f"{'=' * 75}")
-        print(f"  Total: {len(equipmentList)} record(s)")
-                
+    # ─── Search By Status ───
     def searchByStatus(self):
+        UI_Header("SEARCH EQUIPMENT BY STATUS", CYAN)
         try:
-            availableList, rentedList = (self.__services.groupByStatus())
+            availableList, rentedList = self.__services.groupByStatus()
         except Exception as e:
-            print(f"Error : {e}")
+            UI_Error(f"{e}")
+            UI_Return_Prompt()
+            return
         
-        choice = None
+        UI_Card_Start("SELECT STATUS", YELLOW)
+        UI_Menu_Item(1, "Available", YELLOW)
+        UI_Menu_Item(2, "Rented", YELLOW)
+        UI_Divider(YELLOW)
+        UI_Menu_Item(0, "Exit", YELLOW)
+        UI_Card_End(YELLOW)
+        
         while True:
-            print(f"[1] Available")
-            print(f"[2] Rented")
-            print(f"[0] Exit")
-            choice = input("👉 Enter your choice: ").strip()
+            print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
+            choice = input().strip()
             
             match choice:
                 case '1':
-                    self.__AvailableEquipment_display(availableList)
+                    self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT", GREEN)
                     break
                 case '2':
-                    self.__RentedEquipment_display(rentedList)
+                    self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT", RED)
                     break
                 case '0':
                     return
                 case _:
-                    print("\n❌ Invalid choice. Please try again.")
+                    UI_Error("Invalid choice. Please try again.")
                     time.sleep(1.5)
         
-        input("\nPress Enter to continue...")
+        UI_Return_Prompt()
 
+    # ─── Append ───
     def append(self):
+        UI_Header("ADD NEW EQUIPMENT", GREEN)
         newEquipment = Equipment()
         
         fields = [
-            ("Id", "👉 Enter Equipment ID"),
-            ("powerRating", "👉 Enter Equipment Power Rating"),
-            ("hourlyRentalRate", "👉 Enter Equipment Hourly Rental Rate")
+            ("Id", "Equipment ID"),
+            ("powerRating", "Power Rating"),
+            ("hourlyRentalRate", "Hourly Rate")
         ]
         
-        for attr_name, prompt in fields:
+        for attr_name, label in fields:
             while True:
-                userInput = input(f"{prompt} (Type 'exit' to exit): ").strip()
-                if userInput == 'exit':
+                UI_Prompt(label)
+                userInput = input().strip()
+                if userInput.lower() == 'exit':
                     return
                 try:
                     setattr(newEquipment, attr_name, userInput)
-                    # if attr_name == "Id":
-                    #     if self.__services.searchById(userInput) != -1:
-                    #         raise ValueError("Equipment ID already exists.")
                     break 
                 except Exception as e:
-                    print(f"❌ Error : {e}")
+                    UI_Error(f"{e}")
 
         try:
             self.__services.append(newEquipment)
-            print("✅ Equipment added successfully!")
+            UI_Success("Equipment added successfully!")
         except Exception as e:
-            print(f"❌ Error : {e}")
+            UI_Error(f"{e}")
             
-        input("\nPress Enter to continue...")
+        UI_Return_Prompt()
 
+    # ─── Update ───
     def update(self):
+        UI_Header("UPDATE EQUIPMENT", YELLOW)
 
         newEquipment = Equipment()
         # Nhập ID cần cập nhật
         while True:
-
-            userInput = input(
-                "👉 Enter Equipment ID (Type 'exit' to exit): ").strip()
+            UI_Prompt("Equipment ID")
+            userInput = input().strip()
             if userInput.lower() == "exit":
                 return
             try:
                 newEquipment.Id = userInput
                 break
             except Exception as e:
-                print(f"Error : {e}")
+                UI_Error(f"{e}")
 
         try:
             foundEquipment = self.__services.getEquipmentById(newEquipment.Id)
 
-            print("\nCurrent Equipment Information")
-            print("-" * 40)
-            print(f"ID: {foundEquipment.Id}")
-            print(f"[1] Power Rating      : {foundEquipment.powerRating}")
-            print(f"[2] Hourly Rental Rate: {foundEquipment.hourlyRentalRate}")
-            print(f"[3] Status            : {foundEquipment.currentStatus}")
-            print(f"[0] Exit")
-            print("-" * 40)
+            info_headers = ["Field", "Value"]
+            info_widths  = [20, 26]
+            UI_Table_Header(info_headers, info_widths, CYAN)
+            UI_Table_Row(["ID", str(foundEquipment.Id)], info_widths, CYAN)
+            UI_Table_Row(["Power Rating", str(foundEquipment.powerRating)], info_widths, CYAN)
+            UI_Table_Row(["Hourly Rate", str(foundEquipment.hourlyRentalRate)], info_widths, CYAN)
+            UI_Table_Row(["Status", str(foundEquipment.currentStatus)], info_widths, CYAN)
+            UI_Table_End(info_widths, CYAN)
+
+            UI_Card_Start("UPDATE OPTIONS", YELLOW)
+            UI_Menu_Item(1, "Power Rating", YELLOW)
+            UI_Menu_Item(2, "Hourly Rental Rate", YELLOW)
+            UI_Menu_Item(3, "Status", YELLOW)
+            UI_Divider(YELLOW)
+            UI_Menu_Item(0, "Exit", YELLOW)
+            UI_Card_End(YELLOW)
 
             while True:
-                choice = input("👉 Select field (1-3): ").strip()
+                print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
+                choice = input().strip()
                 match choice:
                     case "1":
-                        value = input("👉 New Power Rating: ")
+                        UI_Prompt("New Power Rating")
+                        value = input().strip()
                         self.__services.update(foundEquipment.Id,"powerRating",float(value))
                         break
                     case "2":
-                        value = input("👉 New Hourly Rental Rate: ")
+                        UI_Prompt("New Hourly Rate")
+                        value = input().strip()
                         self.__services.update(foundEquipment.Id, "hourlyRentalRate",float(value))
                         break
                     case "3":
-                        value = input("👉 Status (Available/Rented): ").strip()
+                        UI_Prompt("Status (Available/Rented)")
+                        value = input().strip()
                         self.__services.update(foundEquipment.Id,"currentStatus",value)
                         break
                     case "0":
                         return
                     case _:
-                        print("\n❌ Invalid choice. Please try again.")
+                        UI_Error("Invalid choice. Please try again.")
                         time.sleep(1.5)
-            print("\n✅ Equipment updated successfully!")
+            UI_Success("Equipment updated successfully!")
 
         except Exception as e:
-            print(f"Error : {e}")
-        input("\nPress Enter to continue...")
+            UI_Error(f"{e}")
+        UI_Return_Prompt()
 
+    # ─── Sort ───
     def sort(self):
-        print("\n--- SORT EQUIPMENT ---")
+        UI_Header("SORT EQUIPMENT", CYAN)
         sort_map = {'1': 'hourlyRentalRate', '2': 'powerRating'}
         
+        UI_Card_Start("SORT BY", CYAN)
+        UI_Menu_Item(1, "Hourly Rate", CYAN)
+        UI_Menu_Item(2, "Power Rating", CYAN)
+        UI_Divider(CYAN)
+        UI_Menu_Item(0, "Exit", CYAN)
+        UI_Card_End(CYAN)
+        
         while True:
-            choice = input("👉 Sort by\n [1] Hourly Rate\n [2] Power Rating\n [0] Exit: ").strip()
+            print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
+            choice = input().strip()
             if choice == '0': 
                 return
             if choice in sort_map:
                 sortType = sort_map[choice]
                 break
-            print("❌ Invalid choice!")
+            UI_Error("Invalid choice!")
             
+        UI_Card_Start("ORDER", CYAN)
+        UI_Menu_Item(1, "Ascending", CYAN)
+        UI_Menu_Item(2, "Descending", CYAN)
+        UI_Divider(CYAN)
+        UI_Menu_Item(0, "Exit", CYAN)
+        UI_Card_End(CYAN)
+        
         while True:
-            choice = input("👉 Reverse order?\n [1] Yes\n [2] No\n [0] Exit: ").strip()
+            print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
+            choice = input().strip()
             if choice == '0':
                 return
             if choice in ['1', '2']:
-                isReverse = (choice == '1')
+                isReverse = (choice == '2')
                 break
-            print("❌ Invalid choice!")
+            UI_Error("Invalid choice!")
         
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
             
             if not sorted_list:
-                print("No equipment found to sort or invalid criteria.")
+                UI_Warning("No equipment found.")
                 return
-            
-            print(f"\n✅ Sort Equipment successfully! (By {sortType})")
-            print(f"{'=' * 75}")
-            print(f"| {'ID':<20} | {'Power Rating':>12} | {'Hourly Rate':>12} | {'Status':<12} |")
-            print(f"|{'-' * 22}|{'-' * 14}|{'-' * 14}|{'-' * 14}|")
+
+            UI_Success(f"Sorted by {sortType}!")
+            UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, CYAN)
             for eq in sorted_list:
-                print(f"| {eq.Id:<20} | {eq.powerRating:>12.2f} | {eq.hourlyRentalRate:>12.2f} | {eq.currentStatus:<12} |")
-            print(f"{'=' * 75}")
-            print(f"  Total: {len(sorted_list)} record(s)")
+                values = [
+                    eq.Id,
+                    f"{eq.powerRating:.2f}",
+                    f"{eq.hourlyRentalRate:.2f}",
+                    eq.currentStatus
+                ]
+                UI_Table_Row(values, self.__EQ_WIDTHS, CYAN)
+            UI_Table_End(self.__EQ_WIDTHS, CYAN)
+            UI_Table_Total(len(sorted_list))
             
         except Exception as e:
-            print(f"❌ Error : {e}")
-        input("\nPress Enter to continue...")
+            UI_Error(f"{e}")
+        UI_Return_Prompt()
         
+    # ─── Group By Status ───
     def groupByStatus(self):
         try:
-            availableList, rentedList = (self.__services.groupByStatus())
+            availableList, rentedList = self.__services.groupByStatus()
         except Exception as e:
-            print(f"Error : {e}")
+            UI_Error(f"{e}")
+            UI_Return_Prompt()
+            return
 
-        self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT")
-        self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT")
+        self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT", GREEN)
+        self.__printEquipmentTable(rentedList, "RENTED EQUIPMENT", RED)
 
-        input("\nPress Enter to continue...")
+        UI_Return_Prompt()
