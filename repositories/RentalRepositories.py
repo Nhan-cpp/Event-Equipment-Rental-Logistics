@@ -1,6 +1,5 @@
 from models.Rental import Rental
 from datetime import datetime
-import os
 
 class RentalRepositories():
     FILE_PATH = 'data/rentalData.txt'

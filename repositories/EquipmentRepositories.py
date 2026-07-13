@@ -1,6 +1,5 @@
 from models.Equipment import Equipment
 from datetime import datetime
-import os
 
 class EquipmentRepositories():
     FILE_PATH = 'data/equipmentData.txt'
