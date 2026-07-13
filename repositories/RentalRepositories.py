@@ -27,6 +27,15 @@ class RentalRepositories():
                             datetime.strptime(data[3].strip(), "%d/%m/%Y %H:%M")
                         )
                         rentalList.append(rentalRecord)
+                    elif len(data) == 5:
+                        rentalRecord = Rental(
+                            data[0].strip(),
+                            data[2].strip(),
+                            datetime.strptime(data[3].strip(), "%d/%m/%Y %H:%M"),
+                            datetime.strptime(data[4].strip(), "%d/%m/%Y %H:%M"),
+                            equipmentId=data[1].strip()
+                        )
+                        rentalList.append(rentalRecord)
         except FileNotFoundError:
             raise ValueError("Rental data file not found")
         except ValueError:
@@ -40,7 +49,7 @@ class RentalRepositories():
                 for rental in self.__rentalList:
                     start_str = rental.startTime.strftime("%d/%m/%Y %H:%M") if rental.startTime else ""
                     return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M") if rental.expectedReturnTime else ""
-                    line = f"{rental.Id},{rental.clientName},{start_str},{return_str}\n"
+                    line = f"{rental.Id},{rental.equipmentId},{rental.clientName},{start_str},{return_str}\n"
                     file.write(line)
         except Exception:
             raise ValueError("Error while saving rental data")
@@ -51,7 +60,7 @@ class RentalRepositories():
                 start_str = rental.startTime.strftime("%d/%m/%Y %H:%M") if rental.startTime else ""
                 return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M") if rental.expectedReturnTime else ""
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                line = f"{rental.Id},{rental.clientName},{start_str},{return_str},{current_time}\n"
+                line = f"{rental.Id},{rental.equipmentId},{rental.clientName},{start_str},{return_str},{current_time}\n"
                 file.write(line)
         except Exception:
             raise ValueError("Error while writing rental history log")
@@ -78,21 +87,24 @@ class RentalRepositories():
     def append(self, rental):
         self.__rentalList.append(rental)
 
-    def calculateFeesAndLatePenalties(self, rentalId):
+    def calculateFeesAndLatePenalties(self, rentalId, hourlyRentalRate=None):
         index = self.searchById(rentalId)
         if(index == -1):
             raise ValueError('Rental Id not found.')
         rental = self.__rentalList[index]
         current_time = datetime.now()
+        hourlyRentalRate = self.HOURLY_RENTAL_RATE if hourlyRentalRate is None else float(hourlyRentalRate)
+        if hourlyRentalRate <= 0:
+            raise ValueError("Hourly rental rate must be greater than 0.")
 
         rental_duration = rental.expectedReturnTime - rental.startTime
         rental_duration_hours = rental_duration.total_seconds() / 3600
-        base_fee = rental_duration_hours * self.HOURLY_RENTAL_RATE
+        base_fee = rental_duration_hours * hourlyRentalRate
 
         if current_time > rental.expectedReturnTime:
             late_duration = current_time - rental.expectedReturnTime
             late_duration_hours = late_duration.total_seconds() / 3600
-            late_penalty = late_duration_hours * self.LATE_PENTALTY_RATE
+            late_penalty = late_duration_hours * hourlyRentalRate * self.LATE_PENTALTY_RATE
         else:
             late_penalty = 0
 
