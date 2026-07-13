@@ -18,9 +18,10 @@ class EquipmentRepositories():
                     line = line.strip()
                     if not line:
                         continue
-                    parts = line.split(',')
+                    line = line.split(',')
                     
-                    equipment = Equipment(parts[0],float(parts[1]),float(parts[2]),(parts[3] == 'True'))
+                    is_available = (line[3] == "Available")
+                    equipment = Equipment(line[0],float(line[1]),float(line[2]),is_available)
                     equipmentList.append(equipment)
         except FileNotFoundError:
             raise ValueError("Equipment file not found. Start with empty list.")
@@ -30,21 +31,19 @@ class EquipmentRepositories():
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for equipment in self.__equipmentList:
-                    bool_status = equipment._currentStatus
-                    line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{bool_status}\n"
+                    line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus}\n"
                     file.write(line)
             
         except Exception:
             raise ValueError
 
-    def writeEquipmentMaintenanceLog(self, equipment, action):
+    def writeEquipmentMaintenanceLog(self, equipment : Equipment, action : str):
         try:
             with open(self.MAINTENANCE_FILE_PATH, 'a', encoding='utf-8') as file:
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                bool_status = equipment._currentStatus
-                line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{bool_status},{action},{current_time}\n"
+                line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus},{action},{current_time}\n"
                 file.write(line)
-            return True
+
         except Exception:
             raise ValueError("Error while writing equipment maintenance log")
 
@@ -61,13 +60,13 @@ class EquipmentRepositories():
     def getEquipmentById(self, index: int):
         return self.__equipmentList[index]
 
-    def searchById(self, equipmentID):
+    def searchById(self, equipmentID : str):
         for index in range(len(self.__equipmentList)):
             if self.__equipmentList[index].Id == equipmentID:
                 return index
         return -1
     
-    def searchByStatus(self, status):
+    def searchByStatus(self, status : str):
         resultList = []
         for equipment in self.__equipmentList:
             if equipment.currentStatus == status:
@@ -90,7 +89,7 @@ class EquipmentRepositories():
         
         self.__equipmentList[index] = equipment
     
-    def sort(self, sortType, isReverse):
+    def sort(self, sortType : str, isReverse : bool):
         criteria = {
             "hourlyRentalRate": lambda x: x.hourlyRentalRate,
             "powerRating": lambda x: x.powerRating

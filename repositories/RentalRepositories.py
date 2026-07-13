@@ -20,13 +20,13 @@ class RentalRepositories():
                     line = line.strip()
                     if not line:
                         continue
-                    data = line.split(',')
+                    line = line.split(',')
                     rentalRecord = Rental(
-                        data[0],
-                        data[2],
-                        datetime.strptime(data[3], "%d/%m/%Y %H:%M"),
-                        datetime.strptime(data[4], "%d/%m/%Y %H:%M"),
-                        equipmentId=data[1]
+                        line[0],
+                        line[2],
+                        datetime.strptime(line[3], "%d/%m/%Y %H:%M"),
+                        datetime.strptime(line[4], "%d/%m/%Y %H:%M"),
+                        equipmentId=line[1]
                     )
                     rentalList.append(rentalRecord)
         except FileNotFoundError:
