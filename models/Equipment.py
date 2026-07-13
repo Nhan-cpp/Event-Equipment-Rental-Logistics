@@ -1,10 +1,6 @@
 
 class Equipment():
-    _Id = None
-    _powerRating = None
-    _hourlyRentalRate = None
-    _currentStatus = None
-    MIN_ID_LEN = 8
+    MIN_ID_LEN = 4
     MAX_ID_LEN = 20
 
     def __init__(self,Id = "",powerRating = 0.0,hourlyRentalRate = 0.0,currentStatus = True):
@@ -36,6 +32,7 @@ class Equipment():
             if not character.isalnum():
                 raise ValueError("Equipment Id only contain character or digit.")
         self._Id = new_value
+
     @property
     def powerRating(self):
         return self._powerRating
@@ -43,13 +40,12 @@ class Equipment():
     def powerRating(self,new_value):
         try:
             new_value = float(new_value)
+            if new_value <= 0.0:
+                raise ValueError("Equipment power rating must be greater than 0.")
+            self._powerRating = new_value
         except ValueError:
             raise ValueError("Equipment power rating must be a number.")
         
-        if new_value <= 0.0:
-            raise ValueError("Equipment power rating must be greater than 0.")
-            
-        self._powerRating = new_value
     @property
     def hourlyRentalRate(self):
         return self._hourlyRentalRate
@@ -57,31 +53,17 @@ class Equipment():
     def hourlyRentalRate(self,new_value):
         try:
             new_value = float(new_value)
+            if new_value <= 0.0:
+                raise ValueError("Equipment hourly rental rate must be greater than 0.")
+            self._hourlyRentalRate = new_value
         except ValueError:
             raise ValueError("Equipment hourly rental rate must be a number.")
-            
-        if new_value <= 0.0:
-            raise ValueError("Equipment hourly rental rate must be greater than 0.")
-            
-        self._hourlyRentalRate = new_value
+    
     @property
     def currentStatus(self):
         return "Available" if self._currentStatus else "Rented"
-        
     @currentStatus.setter
     def currentStatus(self,new_value):
-        try:
-            if isinstance(new_value, bool):
-                self._currentStatus = new_value
-                return
-                
-            val = str(new_value).strip().lower()
-            mapping = {
-                'available': True,
-                'rented': False,
-            }
-            if val not in mapping:
-                raise ValueError
-            self._currentStatus = mapping[val]
-        except:
-            raise ValueError("Equipment current status need be Available / Rented.")
+        if not isinstance(new_value, bool):
+            raise ValueError("Equipment current status must be a boolean (True/False).")
+        self._currentStatus = new_value
