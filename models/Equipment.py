@@ -8,10 +8,18 @@ class Equipment():
     MAX_ID_LEN = 20
 
     def __init__(self,Id = "",powerRating = 0.0,hourlyRentalRate = 0.0,currentStatus = True):
-        self._Id = Id
-        self._powerRating = powerRating
-        self._hourlyRentalRate = hourlyRentalRate
-        self._currentStatus = currentStatus
+        self._Id = ""
+        self._powerRating = 0.0
+        self._hourlyRentalRate = 0.0
+        self._currentStatus = True
+
+        if Id != "":
+            self.Id = Id
+        if powerRating != 0.0:
+            self.powerRating = powerRating
+        if hourlyRentalRate != 0.0:
+            self.hourlyRentalRate = hourlyRentalRate
+        self.currentStatus = currentStatus
 
     def __str__(self):
         return f"ID: {self._Id} | Power: {self._powerRating} | Rate: {self._hourlyRentalRate} | Status: {self.currentStatus}"
@@ -22,7 +30,7 @@ class Equipment():
         return self._Id
     @Id.setter
     def Id(self,new_value : str):
-        if(len(new_value) < self.MIN_ID_LEN and self.MAX_ID_LEN < len(new_value)):
+        if(len(new_value) < self.MIN_ID_LEN or self.MAX_ID_LEN < len(new_value)):
             raise ValueError(f"Equipment id need length from {self.MIN_ID_LEN} to {self.MAX_ID_LEN}")
         for character in new_value:
             if not character.isalnum():
