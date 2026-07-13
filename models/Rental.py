@@ -1,12 +1,7 @@
 from datetime import datetime
 
 class Rental():
-    _Id = None
-    _equipmentId = None
-    _clientName = None
-    _startTime = None
-    _expectedReturnTime = None
-    MIN_ID_LEN = 8
+    MIN_ID_LEN = 4
     MAX_ID_LEN = 20
     def __init__(self, Id="", clientName="", startTime=None, expectedReturnTime=None, equipmentId=""):
         self._Id = ""
@@ -59,10 +54,8 @@ class Rental():
         return self._clientName
     @clientName.setter
     def clientName(self,new_value : str):
-        new_value = str(new_value).strip()
-        if "," in new_value or ";" in new_value:
-            raise ValueError("Client name cannot contain comma or semicolon.")
         self._clientName = new_value
+
     @property
     def startTime(self):
         return self._startTime
@@ -74,6 +67,7 @@ class Rental():
             self._startTime = new_value
         except:
             raise ValueError("Invalid start time format. Use dd/mm/yyyy HH:MM")
+
     @property
     def expectedReturnTime(self):
         return self._expectedReturnTime
@@ -82,11 +76,11 @@ class Rental():
         try:
             if isinstance(new_value, str):
                 new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
-            if self._startTime and new_value:
-                if self._startTime > new_value:
-                    raise ValueError("Expected return time must be later than start time.")
-            self._expectedReturnTime = new_value
-        except ValueError as e:
-            raise e
         except:
             raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")
+            
+        if self._startTime and new_value:
+            if self._startTime > new_value:
+                raise ValueError("Expected return time must be later than start time.")
+                
+        self._expectedReturnTime = new_value
