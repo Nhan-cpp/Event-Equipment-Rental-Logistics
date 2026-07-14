@@ -27,7 +27,7 @@ BRIGHT_BLACK   = "\033[90m"
 # UI Component Functions (inspired by fcode-violation-management-system)
 # ─────────────────────────────────────────────────
 
-def UI_Header(title, color=CYAN):
+def UI_Header(title : str, color=CYAN):
     """
     ╭────────────────────────────────────────────────╮
     │ TITLE                                          │
@@ -64,7 +64,7 @@ def UI_Menu_Item(index, label, color=CYAN):
         text = f"[{index}] {label}"
     else:
         text = label
-    print(f"{color}│ {BOLD}{BRIGHT_CYAN}{text:<{width - 1}}{RESET}{color}│{RESET}")
+    print(f"{color}│ {BOLD}{WHITE}{text:<{width - 1}}{RESET}{color}│{RESET}")
 
 def UI_Divider(color=CYAN):
     """
@@ -73,11 +73,11 @@ def UI_Divider(color=CYAN):
     width = 50
     print(f"{color}├{'─' * width}┤{RESET}")
 
-def UI_Prompt(label, glyph="❯"):
+def UI_Prompt(label):
     """
       ❯ Label          : 
     """
-    print(f"{BOLD}{YELLOW}  {glyph} {label:<15} {RESET}: ", end="")
+    print(f"{BOLD}{YELLOW}  ❯ {label:<15} {RESET}: ", end="")
 
 def UI_Return_Prompt():
     """
