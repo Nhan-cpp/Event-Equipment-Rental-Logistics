@@ -3,9 +3,8 @@ from services.RentalServices import RentalServices
 from utils.ui_utils import *
 
 class rentalMenu():
-    __services = None
-    def __init__(self):
-        self.__services = RentalServices()
+    def __init__(self, services):
+        self.__services = services
         try:
             self.__services.loadRentals()
         except ValueError as e:

@@ -1,14 +1,19 @@
 from ui.equipmentMenu import equipmentMenu
 from ui.rentalMenu import rentalMenu
+from services.EquipmentServices import EquipmentServices
+from services.RentalServices import RentalServices
+
 from utils.ui_utils import *
-import sys
 import time
 import os
 
 class mainMenu():
     def __init__(self):
-        self.eqMenu = equipmentMenu()
-        self.rtMenu = rentalMenu()
+        equipmentServices = EquipmentServices()
+        rentalServices = RentalServices(equipmentServices)
+        
+        self.eqMenu = equipmentMenu(equipmentServices)
+        self.rtMenu = rentalMenu(rentalServices)
 
     def __printMenu(self):
         print(f"\n{BOLD}{YELLOW}       EVENT EQUIPMENT RENTAL LOGISTICS SYSTEM{RESET}\n")

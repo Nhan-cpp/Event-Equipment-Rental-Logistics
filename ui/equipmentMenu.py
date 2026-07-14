@@ -5,9 +5,8 @@ import time
 import os
 
 class equipmentMenu():
-    __services = None
-    def __init__(self):
-        self.__services = EquipmentServices()
+    def __init__(self, services):
+        self.__services = services
         try:
             self.__services.loadEquipments()
         except ValueError as e:
