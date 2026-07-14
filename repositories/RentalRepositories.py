@@ -23,8 +23,8 @@ class RentalRepositories():
                     rentalRecord = Rental(
                         line[0],
                         line[2],
-                        datetime.strptime(line[3], "%d/%m/%Y %H:%M"),
-                        datetime.strptime(line[4], "%d/%m/%Y %H:%M"),
+                        datetime.strptime(line[3], "%d/%m/%Y %H"),
+                        datetime.strptime(line[4], "%d/%m/%Y %H"),
                         equipmentId=line[1]
                     )
                     rentalList.append(rentalRecord)
@@ -39,8 +39,8 @@ class RentalRepositories():
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for rental in self.__rentalList:
-                    start_str = rental.startTime.strftime("%d/%m/%Y %H:%M")
-                    return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M")
+                    start_str = rental.startTime.strftime("%d/%m/%Y %H")
+                    return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H")
 
                     line = f"{rental.Id},{rental.equipmentId},{rental.clientName},{start_str},{return_str}\n"
                     file.write(line)
@@ -50,8 +50,8 @@ class RentalRepositories():
     def writeRentalHistoryLog(self, rental : Rental):
         try:
             with open(self.HISTORY_FILE_PATH, 'a', encoding='utf-8') as file:
-                start_str = rental.startTime.strftime("%d/%m/%Y %H:%M")
-                return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H:%M")
+                start_str = rental.startTime.strftime("%d/%m/%Y %H")
+                return_str = rental.expectedReturnTime.strftime("%d/%m/%Y %H")
                 current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
                 line = f"{rental.Id},{rental.equipmentId},{rental.clientName},{start_str},{return_str},{current_time}\n"

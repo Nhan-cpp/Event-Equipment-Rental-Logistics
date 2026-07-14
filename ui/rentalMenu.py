@@ -56,8 +56,8 @@ class rentalMenu():
 
         try:
             rt = self.__services.getRentalById(newRental.Id)
-            start_str = rt.startTime.strftime('%d/%m/%Y %H:%M') if rt.startTime else ''
-            return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H:%M') if rt.expectedReturnTime else ''
+            start_str = rt.startTime.strftime('%d/%m/%Y %H')
+            return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H')
 
             UI_Success("Rental found!")
             info_headers = ["Field", "Value"]
@@ -80,14 +80,14 @@ class rentalMenu():
         newRental = Rental()
 
         newRental.startTime = datetime.now()
-        start_time_str = newRental.startTime.strftime('%d/%m/%Y %H:%M')
+        start_time_str = newRental.startTime.strftime('%d/%m/%Y %H')
         print(f"  {CYAN}Start Time{RESET} : {start_time_str} (Auto-assigned)")
 
         fields = [
             ("Id", "Rental ID"),
             ("equipmentId", "Equipment ID"),
             ("clientName", "Client Name"),
-            ("expectedReturnTime", "Return Time (dd/mm/yyyy HH:MM)")
+            ("expectedReturnTime", "Return Time (dd/mm/yyyy HH)")
         ]
         print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         for attr_name, label in fields:
@@ -183,8 +183,8 @@ class rentalMenu():
             UI_Table_Header(info_headers, info_widths, CYAN)
 
             for rt in sorted_list:
-                start_str = rt.startTime.strftime('%d/%m/%Y %H:%M')
-                return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H:%M')
+                start_str = rt.startTime.strftime('%d/%m/%Y %H')
+                return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H')
                 values = [rt.Id, rt.equipmentId, rt.clientName, start_str, return_str]
                 UI_Table_Row(values, info_widths, CYAN)
 

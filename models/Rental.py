@@ -21,8 +21,8 @@ class Rental():
             self.expectedReturnTime = expectedReturnTime
 
     def __str__(self):
-        start_str = self._startTime.strftime("%d/%m/%Y %H:%M") if self._startTime else ""
-        return_str = self._expectedReturnTime.strftime("%d/%m/%Y %H:%M") if self._expectedReturnTime else ""
+        start_str = self._startTime.strftime("%d/%m/%Y %H")
+        return_str = self._expectedReturnTime.strftime("%d/%m/%Y %H")
         return f"ID: {self._Id} | Equipment: {self._equipmentId} | Client: {self._clientName} | Start: {start_str} | Return: {return_str}"
 
     @property
@@ -63,10 +63,10 @@ class Rental():
     def startTime(self,new_value):
         try:
             if isinstance(new_value, str):
-                new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
+                new_value = datetime.strptime(new_value, "%d/%m/%Y %H")
             self._startTime = new_value
         except:
-            raise ValueError("Invalid start time format. Use dd/mm/yyyy HH:MM")
+            raise ValueError("Invalid start time format. Use dd/mm/yyyy HH")
 
     @property
     def expectedReturnTime(self):
@@ -75,9 +75,9 @@ class Rental():
     def expectedReturnTime(self,new_value):
         try:
             if isinstance(new_value, str):
-                new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
+                new_value = datetime.strptime(new_value, "%d/%m/%Y %H")
         except:
-            raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")
+            raise ValueError("Invalid return time format. Use dd/mm/yyyy HH")
 
         if self._startTime and new_value:
             if self._startTime > new_value:
