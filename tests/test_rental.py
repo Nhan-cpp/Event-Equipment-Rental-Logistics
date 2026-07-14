@@ -23,8 +23,6 @@ class TestRental(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Equipment id need length from 4 to 20"):
             Rental("RT001", "John Doe", self.now, self.later, "EQ1")
 
-
-
     def test_invalid_return_time_logic(self):
         with self.assertRaisesRegex(ValueError, "Expected return time must be later than start time."):
             Rental("RT001", "John Doe", self.later, self.now, "EQ000001")

@@ -4,10 +4,10 @@ from datetime import datetime
 class EquipmentRepositories():
     FILE_PATH = 'data/equipmentData.txt'
     MAINTENANCE_FILE_PATH = 'data/equipmentMaintenanceLog.txt'
-    
+
     def __init__(self):
         self.__equipmentList = []
-    
+
     def loadEquipments(self):
         equipmentList = []
 
@@ -18,21 +18,21 @@ class EquipmentRepositories():
                     if not line:
                         continue
                     line = line.split(',')
-                    
+
                     is_available = (line[3] == "Available")
                     equipment = Equipment(line[0],float(line[1]),float(line[2]),is_available)
                     equipmentList.append(equipment)
         except FileNotFoundError:
             raise ValueError("Equipment file not found. Start with empty list.")
         self.__equipmentList = equipmentList
-    
+
     def saveEquipments(self):
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
                 for equipment in self.__equipmentList:
                     line = f"{equipment.Id},{equipment.powerRating},{equipment.hourlyRentalRate},{equipment.currentStatus}\n"
                     file.write(line)
-            
+
         except Exception:
             raise ValueError
 
@@ -64,18 +64,18 @@ class EquipmentRepositories():
             if self.__equipmentList[index].Id == equipmentID:
                 return index
         return -1
-    
+
     def searchByStatus(self, status : str):
         resultList = []
         for equipment in self.__equipmentList:
             if equipment.currentStatus == status:
                 resultList.append(equipment)
-                    
+
         return resultList
-        
+
     def append(self, new_equipment : Equipment):
         self.__equipmentList.append(new_equipment)
-    
+
     def update(self, index : int, selectedField : str, newValue):
         equipment = self.__equipmentList[index]
 
@@ -85,16 +85,16 @@ class EquipmentRepositories():
             equipment.hourlyRentalRate = newValue
         elif selectedField == "currentStatus":
             equipment.currentStatus = newValue
-        
+
         self.__equipmentList[index] = equipment
-    
+
     def sort(self, sortType : str, isReverse : bool):
         criteria = {
             "hourlyRentalRate": lambda x: x.hourlyRentalRate,
             "powerRating": lambda x: x.powerRating
         }
         return sorted(self.__equipmentList, key=criteria[sortType], reverse=isReverse)
-    
+
     def groupByStatus(self):
         availableList = []
         rentedList = []

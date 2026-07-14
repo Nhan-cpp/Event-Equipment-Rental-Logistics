@@ -11,7 +11,7 @@ class mainMenu():
     def __init__(self):
         equipmentServices = EquipmentServices()
         rentalServices = RentalServices(equipmentServices)
-        
+
         self.eqMenu = equipmentMenu(equipmentServices)
         self.rtMenu = rentalMenu(rentalServices)
 
@@ -40,7 +40,7 @@ class mainMenu():
     def display(self):
         while True:
             self.__printMenu()
-            
+
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
             match choice:
@@ -69,7 +69,7 @@ class mainMenu():
                 case '12':
                     self.rtMenu.printRentalHistoryLog()
                 case '0':
-                    print(f"\n{BRIGHT_CYAN}  ✔ LOGGED OUT SUCCESSFULLY! Goodbye!{RESET}\n")
+                    print(f"\n{CYAN}  ✔ LOGGED OUT SUCCESSFULLY! Goodbye!{RESET}\n")
                     return
                 case _:
                     UI_Error("Invalid choice. Please try again.")

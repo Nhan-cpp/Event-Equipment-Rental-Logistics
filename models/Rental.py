@@ -48,7 +48,7 @@ class Rental():
             if not character.isalnum():
                 raise ValueError("Equipment Id only contain character or digit.")
         self._equipmentId = new_value
-    
+
     @property
     def clientName(self):
         return self._clientName
@@ -78,9 +78,9 @@ class Rental():
                 new_value = datetime.strptime(new_value, "%d/%m/%Y %H:%M")
         except:
             raise ValueError("Invalid return time format. Use dd/mm/yyyy HH:MM")
-            
+
         if self._startTime and new_value:
             if self._startTime > new_value:
                 raise ValueError("Expected return time must be later than start time.")
-                
+
         self._expectedReturnTime = new_value

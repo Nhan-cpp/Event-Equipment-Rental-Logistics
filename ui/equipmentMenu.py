@@ -2,7 +2,6 @@ from models.Equipment import Equipment
 from services.EquipmentServices import EquipmentServices
 from utils.ui_utils import *
 import time
-import os
 
 class equipmentMenu():
     def __init__(self, services : EquipmentServices):
@@ -21,9 +20,9 @@ class equipmentMenu():
     __EQ_HEADERS = ["ID", "Power Rating", "Hourly Rate", "Status"]
     __EQ_WIDTHS  = [20, 12, 12, 12]
 
-    def __printEquipmentTable(self, equipmentList : list, title : str):
-        UI_Header(title, CYAN)
-        UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, CYAN)
+    def __printEquipmentTable(self, equipmentList : list, title : str, color=CYAN):
+        UI_Header(title, color)
+        UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, color)
 
         for eq in equipmentList:
             values = [
@@ -32,16 +31,16 @@ class equipmentMenu():
                 f"{eq.hourlyRentalRate:.2f}",
                 eq.currentStatus
             ]
-            UI_Table_Row(values, self.__EQ_WIDTHS, CYAN)
+            UI_Table_Row(values, self.__EQ_WIDTHS, color)
 
-        UI_Table_End(self.__EQ_WIDTHS, CYAN)
+        UI_Table_End(self.__EQ_WIDTHS, color)
         UI_Table_Total(len(equipmentList))
 
     def printEquipmentMaintenanceLog(self):
         try:
             logs = self.__services.readEquipmentMaintenanceLog()
             UI_Header("EQUIPMENT MAINTENANCE LOG", MAGENTA)
-            
+
             info_widths  = [15, 8, 8, 10, 35, 20]
             UI_Table_Header(["ID", "Power", "Rate", "Status", "Action", "Timestamp"], info_widths, MAGENTA)
 
@@ -59,7 +58,7 @@ class equipmentMenu():
 
             UI_Table_End(info_widths, MAGENTA)
             UI_Table_Total(len(logs))
-            
+
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
@@ -67,7 +66,7 @@ class equipmentMenu():
     def searchById(self):
         UI_Header("SEARCH EQUIPMENT BY ID", CYAN)
         newEquipment = Equipment()
-        
+
         while True:
             UI_Prompt("Equipment ID")
             userInput = input().strip()
@@ -81,16 +80,16 @@ class equipmentMenu():
 
         try:
             eq = self.__services.getEquipmentById(newEquipment.Id)
-            
+
             print(f"  {CYAN}ID{RESET}           : {eq.Id}")
             print(f"  {CYAN}Power Rating{RESET} : {eq.powerRating}")
             print(f"  {CYAN}Hourly Rate{RESET}  : {eq.hourlyRentalRate}")
             print(f"  {CYAN}Status{RESET}       : {eq.currentStatus}")
-            
+
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
-    
+
     def searchByStatus(self):
         UI_Header("SEARCH EQUIPMENT BY STATUS", CYAN)
         try:
@@ -99,18 +98,18 @@ class equipmentMenu():
             UI_Error(f"{e}")
             UI_Return_Prompt()
             return
-        
+
         UI_Card_Start("SELECT STATUS", YELLOW)
         UI_Menu_Item(1, "Available", YELLOW)
         UI_Menu_Item(2, "Rented", YELLOW)
         UI_Divider(YELLOW)
         UI_Menu_Item(0, "Exit", YELLOW)
         UI_Card_End(YELLOW)
-        
+
         while True:
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
-            
+
             match choice:
                 case '1':
                     self.__printEquipmentTable(availableList, "AVAILABLE EQUIPMENT", GREEN)
@@ -123,19 +122,19 @@ class equipmentMenu():
                 case _:
                     UI_Error("Invalid choice. Please try again.")
                     time.sleep(1.5)
-        
+
         UI_Return_Prompt()
 
     def append(self):
         UI_Header("ADD NEW EQUIPMENT", GREEN)
         newEquipment = Equipment()
-        
+
         fields = [
             ("Id", "Equipment ID"),
             ("powerRating", "Power Rating"),
             ("hourlyRentalRate", "Hourly Rate")
         ]
-        
+
         for attr_name, label in fields:
             while True:
                 UI_Prompt(label)
@@ -153,14 +152,14 @@ class equipmentMenu():
             UI_Success("Equipment added successfully!")
         except Exception as e:
             UI_Error(f"{e}")
-            
+
         UI_Return_Prompt()
 
     def update(self):
         UI_Header("UPDATE EQUIPMENT", YELLOW)
 
         newEquipment = Equipment()
-        
+
         while True:
             UI_Prompt("Equipment ID")
             userInput = input().strip()
@@ -221,14 +220,14 @@ class equipmentMenu():
     def sort(self):
         UI_Header("SORT EQUIPMENT", CYAN)
         sort_map = {'1': 'hourlyRentalRate', '2': 'powerRating'}
-        
+
         UI_Card_Start("SORT BY", CYAN)
         UI_Menu_Item(1, "Hourly Rate", CYAN)
         UI_Menu_Item(2, "Power Rating", CYAN)
         UI_Divider(CYAN)
         UI_Menu_Item(0, "Exit", CYAN)
         UI_Card_End(CYAN)
-        
+
         while True:
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
@@ -238,14 +237,14 @@ class equipmentMenu():
                 sortType = sort_map[choice]
                 break
             UI_Error("Invalid choice!")
-            
+
         UI_Card_Start("ORDER", CYAN)
         UI_Menu_Item(1, "Ascending", CYAN)
         UI_Menu_Item(2, "Descending", CYAN)
         UI_Divider(CYAN)
         UI_Menu_Item(0, "Exit", CYAN)
         UI_Card_End(CYAN)
-        
+
         while True:
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
@@ -255,10 +254,10 @@ class equipmentMenu():
                 isReverse = (choice == '2')
                 break
             UI_Error("Invalid choice!")
-        
+
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
-        
+
             UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, CYAN)
 
             for eq in sorted_list:
@@ -272,11 +271,11 @@ class equipmentMenu():
 
             UI_Table_End(self.__EQ_WIDTHS, CYAN)
             UI_Table_Total(len(sorted_list))
-            
+
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
-        
+
     def groupByStatus(self):
         try:
             availableList, rentedList = self.__services.groupByStatus()

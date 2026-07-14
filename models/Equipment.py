@@ -1,4 +1,3 @@
-
 class Equipment():
     MIN_ID_LEN = 4
     MAX_ID_LEN = 20
@@ -20,7 +19,6 @@ class Equipment():
     def __str__(self):
         return f"ID: {self._Id} | Power: {self._powerRating} | Rate: {self._hourlyRentalRate} | Status: {self.currentStatus}"
 
-    
     @property
     def Id(self):
         return self._Id
@@ -45,7 +43,7 @@ class Equipment():
             self._powerRating = new_value
         except ValueError:
             raise ValueError("Equipment power rating must be a number.")
-        
+
     @property
     def hourlyRentalRate(self):
         return self._hourlyRentalRate
@@ -58,7 +56,7 @@ class Equipment():
             self._hourlyRentalRate = new_value
         except ValueError:
             raise ValueError("Equipment hourly rental rate must be a number.")
-    
+
     @property
     def currentStatus(self):
         return "Available" if self._currentStatus else "Rented"

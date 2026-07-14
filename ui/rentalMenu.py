@@ -9,7 +9,7 @@ class rentalMenu():
             self.__services.loadRentals()
         except ValueError as e:
             UI_Warning(f"{e}")
-        
+
     def saveRentals(self):
         try:
             self.__services.saveRentals()
@@ -22,7 +22,7 @@ class rentalMenu():
             UI_Header("RENTAL HISTORY LOG", MAGENTA)
             log_headers = ["ID", "Eq ID", "Client Name", "Start Time", "Return Time", "Timestamp"]
             log_widths  = [12, 12, 16, 16, 16, 20]
-            
+
             UI_Table_Header(log_headers, log_widths, MAGENTA)
             for log in logs:
                 parts = log.split(',')
@@ -31,7 +31,7 @@ class rentalMenu():
                     UI_Table_Row(values, log_widths, MAGENTA)
             UI_Table_End(log_widths, MAGENTA)
             UI_Table_Total(len(logs))
-            
+
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
@@ -45,7 +45,7 @@ class rentalMenu():
             userInput = input().strip()
             if userInput.lower() == "exit":
                 return
-            
+
             try:
                 newRental.Id = userInput
                 break
@@ -101,7 +101,7 @@ class rentalMenu():
             UI_Success("Rental order added successfully!")
         except Exception as e:
             UI_Error(f"{e}")
-            
+
         UI_Return_Prompt()
 
     def calculateFeesAndLatePenalties(self):
@@ -132,14 +132,14 @@ class rentalMenu():
     def sort(self):
         UI_Header("SORT RENTAL", CYAN)
         sort_map = {'1': 'duration', '2': 'clientName'}
-        
+
         UI_Card_Start("SORT BY", CYAN)
         UI_Menu_Item(1, "Duration", CYAN)
         UI_Menu_Item(2, "Client Name", CYAN)
         UI_Divider(CYAN)
         UI_Menu_Item(0, "Exit", CYAN)
         UI_Card_End(CYAN)
-        
+
         while True:
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
@@ -149,14 +149,14 @@ class rentalMenu():
                 sortType = sort_map[choice]
                 break
             UI_Error("Invalid choice!")
-            
+
         UI_Card_Start("ORDER", CYAN)
         UI_Menu_Item(1, "Ascending", CYAN)
         UI_Menu_Item(2, "Descending", CYAN)
         UI_Divider(CYAN)
         UI_Menu_Item(0, "Exit", CYAN)
         UI_Card_End(CYAN)
-        
+
         while True:
             print(f"{BOLD}{YELLOW}  ❯ SELECT FUNCTION: {RESET}", end="")
             choice = input().strip()
@@ -166,7 +166,7 @@ class rentalMenu():
                 isReverse = (choice == '2')
                 break
             UI_Error("Invalid choice!")
-        
+
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
 
@@ -182,7 +182,7 @@ class rentalMenu():
 
             UI_Table_End(info_widths, CYAN)
             UI_Table_Total(len(sorted_list))
-            
+
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()

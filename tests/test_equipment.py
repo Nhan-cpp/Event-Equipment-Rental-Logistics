@@ -24,7 +24,7 @@ class TestEquipment(unittest.TestCase):
     def test_invalid_power_rating(self):
         with self.assertRaisesRegex(ValueError, "Equipment power rating must be a number"):
             Equipment("EQ000001", -5.0, 10.0, True)
-            
+
         with self.assertRaisesRegex(ValueError, "Equipment power rating must be a number"):
             eq = Equipment("EQ000001", 5.5, 10.0, True)
             eq.powerRating = 0.0

@@ -9,7 +9,7 @@ class RentalRepositories():
 
     def __init__(self):
         self.__rentalList = []
-        
+
     def loadRentals(self):
         rentalList = []
 
@@ -34,7 +34,7 @@ class RentalRepositories():
             raise ValueError("Invalid rental data format")
 
         self.__rentalList = rentalList
-    
+
     def saveRentals(self):
         try:
             with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
@@ -77,7 +77,7 @@ class RentalRepositories():
             if self.__rentalList[index].Id == rentalId:
                 return index
         return -1
-    
+
     def append(self, rental : Rental):
         self.__rentalList.append(rental)
 
@@ -98,7 +98,7 @@ class RentalRepositories():
 
         total_fee = base_fee + late_penalty
         return base_fee, late_penalty, total_fee
-    
+
     def sort(self, sort_type, is_reverse=False):
         sorted_list = []
         if sort_type == "duration":
