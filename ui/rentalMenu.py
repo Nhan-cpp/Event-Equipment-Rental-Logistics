@@ -3,7 +3,7 @@ from services.RentalServices import RentalServices
 from utils.ui_utils import *
 
 class rentalMenu():
-    def __init__(self, services):
+    def __init__(self, services : RentalServices):
         self.__services = services
         try:
             self.__services.loadRentals()
@@ -16,37 +16,26 @@ class rentalMenu():
         except ValueError as e:
             UI_Error(f"Error saving: {e}")
 
-    # ─── Rental Table Constants ───
-    __RT_HEADERS = ["ID", "Client Name", "Start Time", "Return Time"]
-    __RT_WIDTHS  = [20, 20, 16, 16]
-
-    # ─── History Log Constants ───
-    __LOG_HEADERS = ["ID", "Client Name", "Start Time", "Return Time", "Timestamp"]
-    __LOG_WIDTHS  = [15, 20, 16, 16, 20]
-
-    # ─── Rental History Log ───
     def printRentalHistoryLog(self):
         try:
             logs = self.__services.readRentalHistoryLog()
             UI_Header("RENTAL HISTORY LOG", MAGENTA)
+            log_headers = ["ID", "Eq ID", "Client Name", "Start Time", "Return Time", "Timestamp"]
+            log_widths  = [12, 12, 16, 16, 16, 20]
             
-            if not logs:
-                print(f"  {BRIGHT_BLACK}(Empty){RESET}")
-            else:
-                UI_Table_Header(self.__LOG_HEADERS, self.__LOG_WIDTHS, MAGENTA)
-                for log in logs:
-                    parts = log.split(',')
-                    if len(parts) >= 5:
-                        values = [parts[0], parts[1], parts[2], parts[3], parts[4]]
-                        UI_Table_Row(values, self.__LOG_WIDTHS, MAGENTA)
-                UI_Table_End(self.__LOG_WIDTHS, MAGENTA)
+            UI_Table_Header(log_headers, log_widths, MAGENTA)
+            for log in logs:
+                parts = log.split(',')
+                if len(parts) >= 6:
+                    values = [parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]]
+                    UI_Table_Row(values, log_widths, MAGENTA)
+            UI_Table_End(log_widths, MAGENTA)
             UI_Table_Total(len(logs))
             
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
 
-    # ─── Search By ID ───
     def searchById(self):
         UI_Header("SEARCH RENTAL BY ID", CYAN)
         newRental = Rental()
@@ -73,6 +62,7 @@ class rentalMenu():
             info_widths  = [20, 26]
             UI_Table_Header(info_headers, info_widths, CYAN)
             UI_Table_Row(["ID", str(rt.Id)], info_widths, CYAN)
+            UI_Table_Row(["Equipment ID", str(rt.equipmentId)], info_widths, CYAN)
             UI_Table_Row(["Client Name", str(rt.clientName)], info_widths, CYAN)
             UI_Table_Row(["Start Time", start_str], info_widths, CYAN)
             UI_Table_Row(["Return Time", return_str], info_widths, CYAN)
@@ -83,12 +73,12 @@ class rentalMenu():
 
         UI_Return_Prompt()
 
-    # ─── Append ───
     def append(self):
         UI_Header("ADD NEW RENTAL RECORD", GREEN)
         newRental = Rental()
         fields = [
             ("Id", "Rental ID"),
+            ("equipmentId", "Equipment ID"),
             ("clientName", "Client Name"),
             ("startTime", "Start Time (dd/mm/yyyy HH:MM)"),
             ("expectedReturnTime", "Return Time (dd/mm/yyyy HH:MM)")
@@ -103,20 +93,17 @@ class rentalMenu():
                 try:
                     setattr(newRental, attr_name, userInput)
                     break
-
                 except Exception as e:
                     UI_Error(f"{e}")
 
         try:
             self.__services.append(newRental)
             UI_Success("Rental order added successfully!")
-
         except Exception as e:
             UI_Error(f"{e}")
             
         UI_Return_Prompt()
 
-    # ─── Calculate Fees ───
     def calculateFeesAndLatePenalties(self):
         UI_Header("CALCULATE RENTAL FEES & PENALTIES", YELLOW)
 
@@ -128,7 +115,6 @@ class rentalMenu():
 
             try:
                 base_fee, late_penalty, total_fee = self.__services.calculateFeesAndLatePenalties(rentalID)
-                UI_Success("Calculated successfully!")
                 fee_headers = ["Fee Type", "Amount"]
                 fee_widths  = [20, 15]
                 UI_Table_Header(fee_headers, fee_widths, YELLOW)
@@ -143,7 +129,6 @@ class rentalMenu():
 
         UI_Return_Prompt()
 
-    # ─── Sort ───
     def sort(self):
         UI_Header("SORT RENTAL", CYAN)
         sort_map = {'1': 'duration', '2': 'clientName'}
@@ -184,19 +169,18 @@ class rentalMenu():
         
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
-            
-            if not sorted_list:
-                UI_Warning("No rental orders found.")
-                return
 
-            UI_Success(f"Sorted by {sortType}!")
-            UI_Table_Header(self.__RT_HEADERS, self.__RT_WIDTHS, CYAN)
+            info_headers = ["ID", "Eq ID", "Client Name", "Start Time", "Return Time"]
+            info_widths  = [12, 12, 16, 16, 16]
+            UI_Table_Header(info_headers, info_widths, CYAN)
+
             for rt in sorted_list:
-                start_str = rt.startTime.strftime('%d/%m/%Y %H:%M') if rt.startTime else ''
-                return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H:%M') if rt.expectedReturnTime else ''
-                values = [rt.Id, rt.clientName, start_str, return_str]
-                UI_Table_Row(values, self.__RT_WIDTHS, CYAN)
-            UI_Table_End(self.__RT_WIDTHS, CYAN)
+                start_str = rt.startTime.strftime('%d/%m/%Y %H:%M')
+                return_str = rt.expectedReturnTime.strftime('%d/%m/%Y %H:%M')
+                values = [rt.Id, rt.equipmentId, rt.clientName, start_str, return_str]
+                UI_Table_Row(values, info_widths, CYAN)
+
+            UI_Table_End(info_widths, CYAN)
             UI_Table_Total(len(sorted_list))
             
         except Exception as e:
