@@ -5,7 +5,7 @@ import time
 import os
 
 class equipmentMenu():
-    def __init__(self, services):
+    def __init__(self, services : EquipmentServices):
         self.__services = services
         try:
             self.__services.loadEquipments()
@@ -18,60 +18,52 @@ class equipmentMenu():
         except ValueError as e:
             UI_Error(f"Error saving: {e}")
 
-    # ─── Equipment Table Constants ───
     __EQ_HEADERS = ["ID", "Power Rating", "Hourly Rate", "Status"]
     __EQ_WIDTHS  = [20, 12, 12, 12]
 
-    def __printEquipmentTable(self, equipmentList, title, color=CYAN):
-        UI_Header(title, color)
-        if len(equipmentList) == 0:
-            print(f"  {BRIGHT_BLACK}(Empty){RESET}")
-        else:
-            UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, color)
-            for eq in equipmentList:
-                values = [
-                    eq.Id,
-                    f"{eq.powerRating:.2f}",
-                    f"{eq.hourlyRentalRate:.2f}",
-                    eq.currentStatus
-                ]
-                UI_Table_Row(values, self.__EQ_WIDTHS, color)
-            UI_Table_End(self.__EQ_WIDTHS, color)
-        UI_Table_Total(len(equipmentList))
+    def __printEquipmentTable(self, equipmentList : list, title : str):
+        UI_Header(title, CYAN)
+        UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, CYAN)
 
-    # ─── Maintenance Log ───
-    __LOG_HEADERS = ["ID", "Power", "Rate", "Status", "Action", "Timestamp"]
-    __LOG_WIDTHS  = [15, 8, 8, 10, 35, 20]
+        for eq in equipmentList:
+            values = [
+                eq.Id,
+                f"{eq.powerRating:.2f}",
+                f"{eq.hourlyRentalRate:.2f}",
+                eq.currentStatus
+            ]
+            UI_Table_Row(values, self.__EQ_WIDTHS, CYAN)
+
+        UI_Table_End(self.__EQ_WIDTHS, CYAN)
+        UI_Table_Total(len(equipmentList))
 
     def printEquipmentMaintenanceLog(self):
         try:
             logs = self.__services.readEquipmentMaintenanceLog()
             UI_Header("EQUIPMENT MAINTENANCE LOG", MAGENTA)
             
-            if not logs:
-                print(f"  {BRIGHT_BLACK}(Empty){RESET}")
-            else:
-                UI_Table_Header(self.__LOG_HEADERS, self.__LOG_WIDTHS, MAGENTA)
-                for log in logs:
-                    parts = log.split(',')
-                    if len(parts) >= 6:
-                        values = [
-                            parts[0],
-                            f"{float(parts[1]):.2f}",
-                            f"{float(parts[2]):.2f}",
-                            parts[3],
-                            parts[4],
-                            parts[5]
-                        ]
-                        UI_Table_Row(values, self.__LOG_WIDTHS, MAGENTA)
-                UI_Table_End(self.__LOG_WIDTHS, MAGENTA)
+            info_widths  = [15, 8, 8, 10, 35, 20]
+            UI_Table_Header(["ID", "Power", "Rate", "Status", "Action", "Timestamp"], info_widths, MAGENTA)
+
+            for log in logs:
+                parts = log.split(',')
+                values = [
+                    parts[0],
+                    f"{float(parts[1]):.2f}",
+                    f"{float(parts[2]):.2f}",
+                    parts[3],
+                    parts[4],
+                    parts[5]
+                ]
+                UI_Table_Row(values, info_widths, MAGENTA)
+
+            UI_Table_End(info_widths, MAGENTA)
             UI_Table_Total(len(logs))
             
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
 
-    # ─── Search By ID ───
     def searchById(self):
         UI_Header("SEARCH EQUIPMENT BY ID", CYAN)
         newEquipment = Equipment()
@@ -90,21 +82,15 @@ class equipmentMenu():
         try:
             eq = self.__services.getEquipmentById(newEquipment.Id)
             
-            UI_Success("Equipment found!")
-            info_headers = ["Field", "Value"]
-            info_widths  = [20, 26]
-            UI_Table_Header(info_headers, info_widths, CYAN)
-            UI_Table_Row(["ID", str(eq.Id)], info_widths, CYAN)
-            UI_Table_Row(["Power Rating", str(eq.powerRating)], info_widths, CYAN)
-            UI_Table_Row(["Hourly Rate", str(eq.hourlyRentalRate)], info_widths, CYAN)
-            UI_Table_Row(["Status", str(eq.currentStatus)], info_widths, CYAN)
-            UI_Table_End(info_widths, CYAN)
+            print(f"  {CYAN}ID{RESET}           : {eq.Id}")
+            print(f"  {CYAN}Power Rating{RESET} : {eq.powerRating}")
+            print(f"  {CYAN}Hourly Rate{RESET}  : {eq.hourlyRentalRate}")
+            print(f"  {CYAN}Status{RESET}       : {eq.currentStatus}")
             
         except Exception as e:
             UI_Error(f"{e}")
         UI_Return_Prompt()
     
-    # ─── Search By Status ───
     def searchByStatus(self):
         UI_Header("SEARCH EQUIPMENT BY STATUS", CYAN)
         try:
@@ -140,7 +126,6 @@ class equipmentMenu():
         
         UI_Return_Prompt()
 
-    # ─── Append ───
     def append(self):
         UI_Header("ADD NEW EQUIPMENT", GREEN)
         newEquipment = Equipment()
@@ -171,12 +156,11 @@ class equipmentMenu():
             
         UI_Return_Prompt()
 
-    # ─── Update ───
     def update(self):
         UI_Header("UPDATE EQUIPMENT", YELLOW)
 
         newEquipment = Equipment()
-        # Nhập ID cần cập nhật
+        
         while True:
             UI_Prompt("Equipment ID")
             userInput = input().strip()
@@ -191,14 +175,10 @@ class equipmentMenu():
         try:
             foundEquipment = self.__services.getEquipmentById(newEquipment.Id)
 
-            info_headers = ["Field", "Value"]
-            info_widths  = [20, 26]
-            UI_Table_Header(info_headers, info_widths, CYAN)
-            UI_Table_Row(["ID", str(foundEquipment.Id)], info_widths, CYAN)
-            UI_Table_Row(["Power Rating", str(foundEquipment.powerRating)], info_widths, CYAN)
-            UI_Table_Row(["Hourly Rate", str(foundEquipment.hourlyRentalRate)], info_widths, CYAN)
-            UI_Table_Row(["Status", str(foundEquipment.currentStatus)], info_widths, CYAN)
-            UI_Table_End(info_widths, CYAN)
+            print(f"\n  {CYAN}ID{RESET}           : {foundEquipment.Id}")
+            print(f"  {CYAN}Power Rating{RESET} : {foundEquipment.powerRating}")
+            print(f"  {CYAN}Hourly Rate{RESET}  : {foundEquipment.hourlyRentalRate}")
+            print(f"  {CYAN}Status{RESET}       : {foundEquipment.currentStatus}")
 
             UI_Card_Start("UPDATE OPTIONS", YELLOW)
             UI_Menu_Item(1, "Power Rating", YELLOW)
@@ -238,7 +218,6 @@ class equipmentMenu():
             UI_Error(f"{e}")
         UI_Return_Prompt()
 
-    # ─── Sort ───
     def sort(self):
         UI_Header("SORT EQUIPMENT", CYAN)
         sort_map = {'1': 'hourlyRentalRate', '2': 'powerRating'}
@@ -279,13 +258,9 @@ class equipmentMenu():
         
         try:
             sorted_list = self.__services.sort(sortType, isReverse)
-            
-            if not sorted_list:
-                UI_Warning("No equipment found.")
-                return
-
-            UI_Success(f"Sorted by {sortType}!")
+        
             UI_Table_Header(self.__EQ_HEADERS, self.__EQ_WIDTHS, CYAN)
+
             for eq in sorted_list:
                 values = [
                     eq.Id,
@@ -294,6 +269,7 @@ class equipmentMenu():
                     eq.currentStatus
                 ]
                 UI_Table_Row(values, self.__EQ_WIDTHS, CYAN)
+
             UI_Table_End(self.__EQ_WIDTHS, CYAN)
             UI_Table_Total(len(sorted_list))
             
@@ -301,7 +277,6 @@ class equipmentMenu():
             UI_Error(f"{e}")
         UI_Return_Prompt()
         
-    # ─── Group By Status ───
     def groupByStatus(self):
         try:
             availableList, rentedList = self.__services.groupByStatus()
