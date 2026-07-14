@@ -25,22 +25,17 @@ class mainMenu():
         UI_Menu_Item(4, "Search Equipment By Status", CYAN)
         UI_Menu_Item(5, "View & Group By Rental Status", CYAN)
         UI_Menu_Item(6, "View & Sort Equipment List", CYAN)
+
+        UI_Menu_Item(7, "Add New Rental Order", CYAN)
+        UI_Menu_Item(8, "Search Rental Order By ID", CYAN)
+        UI_Menu_Item(9, "Calculate Rental Fees & Penalties", CYAN)
+        UI_Menu_Item(10, "View & Sort Rental List", CYAN)
+
+        UI_Menu_Item(11, "View Equipment Maintenance Log", CYAN)
+        UI_Menu_Item(12, "View Rental History Log", CYAN)
+
+        UI_Menu_Item(0, "EXIT", CYAN)
         UI_Card_End(CYAN)
-
-        UI_Card_Start("RENTAL OPTIONS", GREEN)
-        UI_Menu_Item(7, "Add New Rental Record", GREEN)
-        UI_Menu_Item(8, "Calculate Rental Fees & Penalties", GREEN)
-        UI_Menu_Item(9, "View & Sort Rental List", GREEN)
-        UI_Card_End(GREEN)
-
-        UI_Card_Start("LOGS OPTIONS", MAGENTA)
-        UI_Menu_Item(10, "View Equipment Maintenance Log", MAGENTA)
-        UI_Menu_Item(11, "View Rental History Log", MAGENTA)
-        UI_Card_End(MAGENTA)
-
-        UI_Divider(YELLOW)
-        UI_Menu_Item(0, "EXIT", YELLOW)
-        UI_Card_End(YELLOW)
 
     def display(self):
         while True:
@@ -64,12 +59,14 @@ class mainMenu():
                 case '7':
                     self.rtMenu.append()
                 case '8':
-                    self.rtMenu.calculateFeesAndLatePenalties()
+                    self.rtMenu.searchById()
                 case '9':
-                    self.rtMenu.sort()
+                    self.rtMenu.calculateFeesAndLatePenalties()
                 case '10':
-                    self.eqMenu.printEquipmentMaintenanceLog()
+                    self.rtMenu.sort()
                 case '11':
+                    self.eqMenu.printEquipmentMaintenanceLog()
+                case '12':
                     self.rtMenu.printRentalHistoryLog()
                 case '0':
                     print(f"\n{BRIGHT_CYAN}  ✔ LOGGED OUT SUCCESSFULLY! Goodbye!{RESET}\n")
