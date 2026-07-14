@@ -33,9 +33,8 @@ class Rental():
     def Id(self,new_value : str):
         if(len(new_value) < self.MIN_ID_LEN or self.MAX_ID_LEN < len(new_value)):
             raise ValueError(f"Rental id need length from {self.MIN_ID_LEN} to {self.MAX_ID_LEN}")
-        for character in new_value:
-            if not character.isalnum():
-                raise ValueError("Rental Id only contain character or digit.")
+        if(validate_ID(new_value) == False):
+            raise ValueError("Rental Id only contain character or digit.")
         self._Id = new_value
 
     @property

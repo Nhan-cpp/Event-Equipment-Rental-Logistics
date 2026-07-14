@@ -39,11 +39,12 @@ class Equipment():
     def powerRating(self,new_value):
         try:
             new_value = float(new_value)
-            if new_value <= 0.0:
-                raise ValueError("Equipment power rating must be greater than 0.")
-            self._powerRating = new_value
         except ValueError:
             raise ValueError("Equipment power rating must be a number.")
+        
+        if new_value <= 0.0:
+            raise ValueError("Equipment power rating must be greater than 0.")
+        self._powerRating = new_value
 
     @property
     def hourlyRentalRate(self):
@@ -52,11 +53,12 @@ class Equipment():
     def hourlyRentalRate(self,new_value):
         try:
             new_value = float(new_value)
-            if new_value <= 0.0:
-                raise ValueError("Equipment hourly rental rate must be greater than 0.")
-            self._hourlyRentalRate = new_value
         except ValueError:
             raise ValueError("Equipment hourly rental rate must be a number.")
+
+        if new_value <= 0.0:
+            raise ValueError("Equipment hourly rental rate must be greater than 0.")
+        self._hourlyRentalRate = new_value
 
     @property
     def currentStatus(self):
