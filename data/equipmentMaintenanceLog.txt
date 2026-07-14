@@ -1,3 +1,0 @@
-1234,2.0,2.0,Available,Added new equipment,14/07/2026 12:16:27
-1234,2.0,2.0,Rented,Updated currentStatus to False,14/07/2026 12:16:47
-124125,2.0,2.0,Available,Added new equipment,14/07/2026 16:11:26
