@@ -1,9 +1,11 @@
 from models.Equipment import Equipment
 from services.EquipmentServices import EquipmentServices
-from utils.ui_utils import *
+from utils.ui import *
 import time
 
 class equipmentMenu():
+    __EQ_HEADERS = ["ID", "Power Rating", "Hourly Rate", "Status"]
+    __EQ_WIDTHS  = [20, 12, 12, 12]
     def __init__(self, services : EquipmentServices):
         self.__services = services
         try:
@@ -16,9 +18,6 @@ class equipmentMenu():
             self.__services.saveEquipments()
         except ValueError as e:
             UI_Error(f"Error saving: {e}")
-
-    __EQ_HEADERS = ["ID", "Power Rating", "Hourly Rate", "Status"]
-    __EQ_WIDTHS  = [20, 12, 12, 12]
 
     def __printEquipmentTable(self, equipmentList : list, title : str, color=CYAN):
         UI_Header(title, color)
@@ -67,6 +66,7 @@ class equipmentMenu():
         UI_Header("SEARCH EQUIPMENT BY ID", CYAN)
         newEquipment = Equipment()
 
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         while True:
             UI_Prompt("Equipment ID")
             userInput = input().strip()
@@ -135,6 +135,7 @@ class equipmentMenu():
             ("hourlyRentalRate", "Hourly Rate")
         ]
 
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         for attr_name, label in fields:
             while True:
                 UI_Prompt(label)
@@ -160,6 +161,7 @@ class equipmentMenu():
 
         newEquipment = Equipment()
 
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         while True:
             UI_Prompt("Equipment ID")
             userInput = input().strip()

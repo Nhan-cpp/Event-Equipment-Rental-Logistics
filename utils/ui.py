@@ -6,12 +6,13 @@ GREEN       = "\033[32m"
 YELLOW      = "\033[33m"
 MAGENTA     = "\033[35m"
 CYAN        = "\033[36m"
+WHITE       = "\033[37m"
 
 def UI_Header(title : str, color=CYAN):
 
     width = 50
     print(f"\n{color}╭{'─' * width}╮{RESET}")
-    print(f"{color}│{BOLD} {title:<{width - 1}}{RESET}{color}│{RESET}")
+    print(f"{color}│{BOLD}{WHITE} {title:<{width - 1}}{RESET}{color}│{RESET}")
     print(f"{color}╰{'─' * width}╯{RESET}")
 
 def UI_Card_Start(title, color=CYAN):
@@ -20,7 +21,7 @@ def UI_Card_Start(title, color=CYAN):
     title_len = len(title)
     side = (width - title_len - 2) // 2
     remainder = width - title_len - 2 - side
-    print(f"\n{color}╭{'─' * side} {BOLD}{title}{RESET}{color} {'─' * remainder}╮{RESET}")
+    print(f"\n{color}╭{'─' * side} {BOLD}{WHITE}{title}{RESET}{color} {'─' * remainder}╮{RESET}")
 
 def UI_Card_End(color=CYAN):
 
@@ -34,7 +35,7 @@ def UI_Menu_Item(index, label, color=CYAN):
         text = f"[{index}] {label}"
     else:
         text = label
-    print(f"{color}│ {BOLD}{text:<{width - 1}}{RESET}{color}│{RESET}")
+    print(f"{color}│ {BOLD}{WHITE}{text:<{width - 1}}{RESET}{color}│{RESET}")
 
 def UI_Divider(color=CYAN):
 
@@ -68,7 +69,7 @@ def UI_Table_Header(headers, widths, color=CYAN):
 
     row = f"  {color}│{RESET}"
     for i, h in enumerate(headers):
-        row += f" {BOLD}{h:<{widths[i]}}{RESET} {color}│{RESET}"
+        row += f" {BOLD}{WHITE}{h:<{widths[i]}}{RESET} {color}│{RESET}"
     print(row)
 
     sep = f"  {color}├"
@@ -81,7 +82,7 @@ def UI_Table_Row(values, widths, color=CYAN):
 
     row = f"  {color}│{RESET}"
     for i, v in enumerate(values):
-        row += f" {v:<{widths[i]}} {color}│{RESET}"
+        row += f" {WHITE}{v:<{widths[i]}}{RESET} {color}│{RESET}"
     print(row)
 
 def UI_Table_End(widths, color=CYAN):
@@ -93,4 +94,4 @@ def UI_Table_End(widths, color=CYAN):
     print(f"{bottom}{RESET}")
 
 def UI_Table_Total(count):
-    print(f"  {BOLD}{CYAN}Total: {count} record(s){RESET}")
+    print(f"  {BOLD}{WHITE}Total: {count} record(s){RESET}")

@@ -3,7 +3,7 @@ from ui.rentalMenu import rentalMenu
 from services.EquipmentServices import EquipmentServices
 from services.RentalServices import RentalServices
 
-from utils.ui_utils import *
+from utils.ui import *
 import time
 import os
 
@@ -33,7 +33,7 @@ class mainMenu():
 
         UI_Menu_Item(11, "View Equipment Maintenance Log", CYAN)
         UI_Menu_Item(12, "View Rental History Log", CYAN)
-
+        UI_Divider(CYAN)
         UI_Menu_Item(0, "EXIT", CYAN)
         UI_Card_End(CYAN)
 

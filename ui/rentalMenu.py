@@ -1,6 +1,6 @@
 from models.Rental import Rental
 from services.RentalServices import RentalServices
-from utils.ui_utils import *
+from utils.ui import *
 
 class rentalMenu():
     def __init__(self, services : RentalServices):
@@ -40,6 +40,7 @@ class rentalMenu():
         UI_Header("SEARCH RENTAL BY ID", CYAN)
         newRental = Rental()
 
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         while True:
             UI_Prompt("Rental ID")
             userInput = input().strip()
@@ -83,6 +84,7 @@ class rentalMenu():
             ("startTime", "Start Time (dd/mm/yyyy HH:MM)"),
             ("expectedReturnTime", "Return Time (dd/mm/yyyy HH:MM)")
         ]
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         for attr_name, label in fields:
             while True:
                 UI_Prompt(label)
@@ -107,6 +109,7 @@ class rentalMenu():
     def calculateFeesAndLatePenalties(self):
         UI_Header("CALCULATE RENTAL FEES & PENALTIES", YELLOW)
 
+        print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
         while True:
             UI_Prompt("Rental ID")
             rentalID = input().strip()
