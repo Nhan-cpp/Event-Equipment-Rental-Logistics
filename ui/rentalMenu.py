@@ -1,6 +1,7 @@
 from models.Rental import Rental
 from services.RentalServices import RentalServices
 from utils.ui import *
+from datetime import datetime
 
 class rentalMenu():
     def __init__(self, services : RentalServices):
@@ -77,11 +78,15 @@ class rentalMenu():
     def append(self):
         UI_Header("ADD NEW RENTAL RECORD", GREEN)
         newRental = Rental()
+
+        newRental.startTime = datetime.now()
+        start_time_str = newRental.startTime.strftime('%d/%m/%Y %H:%M')
+        print(f"  {CYAN}Start Time{RESET} : {start_time_str} (Auto-assigned)")
+
         fields = [
             ("Id", "Rental ID"),
             ("equipmentId", "Equipment ID"),
             ("clientName", "Client Name"),
-            ("startTime", "Start Time (dd/mm/yyyy HH:MM)"),
             ("expectedReturnTime", "Return Time (dd/mm/yyyy HH:MM)")
         ]
         print(f"\n  {CYAN}* Tip: Type 'exit' to cancel.{RESET}\n")
