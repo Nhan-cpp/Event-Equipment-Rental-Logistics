@@ -1,4 +1,5 @@
 from datetime import datetime
+from utils.utils import validate_ID
 
 class Rental():
     MIN_ID_LEN = 4
@@ -44,9 +45,8 @@ class Rental():
     def equipmentId(self,new_value : str):
         if(len(new_value) < self.MIN_ID_LEN or self.MAX_ID_LEN < len(new_value)):
             raise ValueError(f"Equipment id need length from {self.MIN_ID_LEN} to {self.MAX_ID_LEN}")
-        for character in new_value:
-            if not character.isalnum():
-                raise ValueError("Equipment Id only contain character or digit.")
+        if(validate_ID(new_value) == False):
+            raise ValueError("Equipment Id only contain character or digit.")
         self._equipmentId = new_value
 
     @property

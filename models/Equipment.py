@@ -1,3 +1,5 @@
+from utils.utils import validate_ID
+
 class Equipment():
     MIN_ID_LEN = 4
     MAX_ID_LEN = 20
@@ -26,9 +28,8 @@ class Equipment():
     def Id(self,new_value : str):
         if(len(new_value) < self.MIN_ID_LEN or self.MAX_ID_LEN < len(new_value)):
             raise ValueError(f"Equipment id need length from {self.MIN_ID_LEN} to {self.MAX_ID_LEN}")
-        for character in new_value:
-            if not character.isalnum():
-                raise ValueError("Equipment Id only contain character or digit.")
+        if(validate_ID(new_value) == False):
+            raise ValueError("Equipment Id only contain character or digit.")
         self._Id = new_value
 
     @property
