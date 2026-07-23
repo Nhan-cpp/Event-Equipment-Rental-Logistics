@@ -65,6 +65,13 @@ class Equipment():
         return "Available" if self._currentStatus else "Rented"
     @currentStatus.setter
     def currentStatus(self,new_value):
+        if isinstance(new_value, str):
+            val = new_value.strip().lower()
+            if val in ["available", "true"]:
+                new_value = True
+            elif val in ["rented", "false"]:
+                new_value = False
+                
         if not isinstance(new_value, bool):
-            raise ValueError("Equipment current status must be a boolean (True/False).")
+            raise ValueError("Equipment current status must be 'Available'/'Rented' or True/False.")
         self._currentStatus = new_value

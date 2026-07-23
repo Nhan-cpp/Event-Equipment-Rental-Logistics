@@ -5,3 +5,4 @@ abcd,36.0,67.3,Available,Added new equipment,14/07/2026 18:41:57
 SE211932,3.9,3.6,Available,Updated powerRating to 3.9,14/07/2026 18:42:38
 abcd,36.0,67.3,Rented,Updated currentStatus to False,14/07/2026 18:43:13
 HE20,3.2,2.6,Available,Added new equipment,14/07/2026 20:39:00
+1234,2.3,0.36,Available,Updated currentStatus to Available,23/07/2026 15:37:55
